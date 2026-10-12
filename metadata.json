@@ -1,0 +1,8 @@
+{
+  "name": "Remix Reflex \u0026 Memory Quiz Arena",
+  "description": "High-octane brain training and arcade arena testing reflex speed, spatial memory patterns, and speed math arithmetic with instant audio-visual feedback and stats.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

@@ -1,0 +1,53 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: 'Outfit', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+body {
+  font-family: var(--font-sans);
+}
+
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+@keyframes flash-cyan {
+  0%, 100% { opacity: 0.25; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.02); filter: drop-shadow(0 0 16px rgba(6, 182, 212, 0.8)); }
+}
+
+@keyframes flash-purple {
+  0%, 100% { opacity: 0.25; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.02); filter: drop-shadow(0 0 16px rgba(168, 85, 247, 0.8)); }
+}
+
+@keyframes flash-emerald {
+  0%, 100% { opacity: 0.25; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.02); filter: drop-shadow(0 0 16px rgba(16, 185, 129, 0.8)); }
+}
+
+@keyframes flash-amber {
+  0%, 100% { opacity: 0.25; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.02); filter: drop-shadow(0 0 16px rgba(245, 158, 11, 0.8)); }
+}
+
+.flash-active-cyan {
+  animation: flash-cyan 0.3s ease-in-out;
+}
+.flash-active-purple {
+  animation: flash-purple 0.3s ease-in-out;
+}
+.flash-active-emerald {
+  animation: flash-emerald 0.3s ease-in-out;
+}
+.flash-active-amber {
+  animation: flash-amber 0.3s ease-in-out;
+}
+

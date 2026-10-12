@@ -1,0 +1,3502 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full bg-slate-950 text-slate-100">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>Reflex & Memory Quiz Arena</title>
+  <meta name="description" content="High-octane brain training and arcade arena testing reflex speed, spatial memory patterns, and speed math arithmetic with instant audio-visual feedback and stats.">
+  <meta property="og:title" content="Reflex & Memory Quiz Arena">
+  <meta property="og:description" content="High-octane brain training and arcade arena testing reflex speed, spatial memory patterns, and speed math arithmetic with instant audio-visual feedback and stats.">
+  <meta property="og:type" content="website">
+  <meta name="theme-color" content="#06b6d4">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Reflex & Memory Quiz Arena">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            cyber: {
+              cyan: '#06b6d4',
+              purple: '#a855f7',
+              emerald: '#10b981',
+              rose: '#f43f5e',
+              amber: '#f59e0b',
+              neon: '#22d3ee'
+            }
+          },
+          animation: {
+            'pulse-fast': 'pulse 1s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+            'bounce-short': 'bounce 0.6s infinite',
+            'glow-pulse': 'glow 2s infinite ease-in-out',
+            'float': 'float 3s ease-in-out infinite',
+            'fadeIn': 'fadeIn 0.5s ease-out forwards'
+          },
+          keyframes: {
+            glow: {
+              '0%, 100%': { boxShadow: '0 0 15px rgba(6, 182, 212, 0.4)' },
+              '50%': { boxShadow: '0 0 30px rgba(6, 182, 212, 0.8)' }
+            },
+            float: {
+              '0%, 100%': { transform: 'translateY(0)' },
+              '50%': { transform: 'translateY(-6px)' }
+            },
+            fadeIn: {
+              '0%': { opacity: '0' },
+              '100%': { opacity: '1' }
+            }
+          }
+        }
+      }
+    };
+  </script>
+
+  <!-- Tone.js CDN for Web Audio Synthesizer -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.min.js"></script>
+
+  <!-- Inline Web App Manifest Data URI -->
+  <link rel="manifest" href="data:application/manifest+json;base64,eyJuYW1lIjoiUmVmbGV4ICYgTWVtb3J5IFF1aXogQXJlbmEiLCJzaG9ydF9uYW1lIjoiUXVpekFyZW5hIiwic3RhcnRfdXJsIjoiLiIsImRpc3BsYXkiOiJzdGFuZGFsb25lIiwiYmFja2dyb3VuZF9jb2xvciI6IiMwMjA2MTciLCJ0aGVtZV9jb2xvciI6IiMwNmI2ZDQiLCJpY29ucyI6W3sic3JjIjoiZGF0YTppbWFnZS9zdmcreG1sO3V0ZjgsPHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdCb3g9JzAgMCA1MTIgNTEyJyBmaWxsPScjMDZiNmQ0Jz48cmVjdCB3aWR0aD0nNTEyJyBoZWlnaHQ9JzUxMicgZmlsbD0nIzAyMDYxNycvPjxwYXRoIGQ9J00yNTYgNjQgTDM1MiAyNTYgTDI3MiAyNTYgTDMwNCA0NDggTDE2MCAyNTYgTDIyNCAyNTYgWicgZmlsbD0nIzA2YjZkNConLz48L3N2Zz4iLCJzaXplcyI6IjE5MngxOTIgNTEyeDUxMiIsInR5cGUiOiJpbWFnZS9zdmcreG1sIiwicHVycG9zZSI6ImFueSBtYXNrYWJsZSJ9XX0=">
+
+  <style>
+    * {
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: manipulation;
+    }
+    .glass-panel {
+      background: rgba(15, 23, 42, 0.82);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .tabular-nums {
+      font-variant-numeric: tabular-nums;
+    }
+    body.theme-matrix {
+      --primary-neon: #10b981;
+      --primary-border: rgba(16, 185, 129, 0.4);
+    }
+    body.theme-crimson {
+      --primary-neon: #f43f5e;
+      --primary-border: rgba(244, 63, 94, 0.4);
+    }
+    body.theme-amethyst {
+      --primary-neon: #a855f7;
+      --primary-border: rgba(168, 85, 247, 0.4);
+    }
+    body.theme-gold {
+      --primary-neon: #f59e0b;
+      --primary-border: rgba(245, 158, 11, 0.4);
+    }
+    body.theme-spark {
+      --primary-neon: #eab308;
+      --primary-border: rgba(234, 179, 8, 0.45);
+    }
+    body.theme-circuit {
+      --primary-neon: #06b6d4;
+      --primary-border: rgba(6, 182, 212, 0.45);
+    }
+    body.theme-volt {
+      --primary-neon: #3b82f6;
+      --primary-border: rgba(59, 130, 246, 0.45);
+    }
+    body.theme-surge {
+      --primary-neon: #a855f7;
+      --primary-border: rgba(168, 85, 247, 0.45);
+    }
+    body.theme-phantom {
+      --primary-neon: #ec4899;
+      --primary-border: rgba(236, 72, 153, 0.45);
+    }
+    body.theme-apex {
+      --primary-neon: #f97316;
+      --primary-border: rgba(249, 115, 22, 0.45);
+    }
+    body.theme-mythic {
+      --primary-neon: #f59e0b;
+      --primary-border: rgba(245, 158, 11, 0.6);
+      background: radial-gradient(circle at 50% 15%, #1e112a 0%, #020617 80%);
+    }
+
+    @keyframes shineSweep {
+      0% { transform: translateX(-150%) rotate(25deg); opacity: 0; }
+      15% { opacity: 0.75; }
+      35% { transform: translateX(250%) rotate(25deg); opacity: 0; }
+      100% { transform: translateX(250%) rotate(25deg); opacity: 0; }
+    }
+    .badge-shine-effect {
+      position: absolute;
+      top: -60%;
+      left: -60%;
+      width: 220%;
+      height: 220%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.55), transparent);
+      pointer-events: none;
+      animation: shineSweep 3.5s ease-in-out infinite;
+    }
+
+    @keyframes mythicSpin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    .mythic-ring-spin {
+      animation: mythicSpin 7s linear infinite;
+      transform-origin: center;
+    }
+
+    @keyframes mythicPulse {
+      0%, 100% { filter: drop-shadow(0 0 8px rgba(245, 158, 11, 0.6)) drop-shadow(0 0 16px rgba(236, 72, 153, 0.4)); }
+      50% { filter: drop-shadow(0 0 18px rgba(245, 158, 11, 0.95)) drop-shadow(0 0 28px rgba(6, 182, 212, 0.6)); }
+    }
+    .mythic-aura {
+      animation: mythicPulse 2.4s ease-in-out infinite;
+    }
+
+    @keyframes screenFlashAnim {
+      0% { opacity: 0.9; }
+      100% { opacity: 0; }
+    }
+    .screen-flash {
+      animation: screenFlashAnim 0.45s ease-out forwards;
+    }
+
+    @keyframes quoteLineIn {
+      0% { opacity: 0; transform: translateY(14px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+    .animate-quote-line {
+      opacity: 0;
+      animation: quoteLineIn 0.75s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+  </style>
+
+  <!-- Vite module import to load the 500-entry verified quotes dataset -->
+  <script type="module">
+    import { ALL_QUOTES } from './src/data/quotes.ts';
+    window.ARENA_ALL_QUOTES = ALL_QUOTES;
+    if (window.initQuoteShuffleBag) {
+      window.initQuoteShuffleBag();
+    }
+  </script>
+</head>
+<body class="h-full flex flex-col justify-between antialiased selection:bg-cyan-500 selection:text-black font-sans bg-slate-950 text-slate-100 overflow-x-hidden">
+
+  <!-- TOP CYBER HEADER -->
+  <header class="w-full bg-slate-900/90 border-b border-slate-800/80 px-4 py-2.5 sticky top-0 z-40 backdrop-blur-md">
+    <div class="max-w-md mx-auto flex items-center justify-between gap-2">
+      <!-- Brand & Title -->
+      <div class="flex items-center gap-2 cursor-pointer" onclick="showView('home')">
+        <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-cyan-500 to-purple-600 flex items-center justify-center font-black text-black text-base shadow-md">
+          ⚡
+        </div>
+        <div>
+          <div class="flex items-center gap-1.5">
+            <h1 class="font-extrabold text-sm tracking-wider bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">
+              ARENA
+            </h1>
+            <span id="playerTitleBadge" class="text-[9px] font-mono px-1.5 py-0.2 rounded bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
+              Neophyte
+            </span>
+          </div>
+          <div class="flex items-center gap-1.5 text-[10px] text-slate-400 font-mono">
+            <span>LVL <strong id="headerLevel" class="text-cyan-400">1</strong></span>
+            <span>·</span>
+            <span>🪙 <strong id="headerCoins" class="text-amber-400 tabular-nums">0</strong></span>
+            <span>·</span>
+            <button onclick="event.stopPropagation(); showView('ladder')" class="flex items-center gap-1 hover:text-white transition-colors cursor-pointer" title="Player Rank Ladder">
+              <span id="headerRankBadgeIcon" class="w-3.5 h-3.5 flex items-center justify-center shrink-0"></span>
+              <strong id="headerRankName" class="text-slate-300">Rookie 1</strong>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Action Controls -->
+      <div class="flex items-center gap-1.5">
+        <!-- Round Milestone Badge -->
+        <span id="roundCounterBadge" class="text-[10px] font-mono px-2 py-1 rounded-lg bg-slate-800/80 text-slate-400 border border-slate-700" title="Rounds towards next quote reflection">
+          Round 0
+        </span>
+
+        <!-- Streak Shield Status Icon -->
+        <button id="streakShieldBtn" onclick="showShieldInfo()" class="p-1.5 rounded-lg border text-xs flex items-center gap-1 transition-all bg-slate-900/80 border-slate-800 text-slate-500" title="Streak Shield">
+          <span id="shieldIcon">🛡️</span>
+          <span id="shieldCount" class="text-[10px] font-bold font-mono">0</span>
+        </button>
+
+        <!-- Install PWA Button -->
+        <button id="installPwaBtn" onclick="installPWA()" class="hidden px-2 py-1.5 rounded-lg bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 text-xs font-bold border border-cyan-500/30 transition-all flex items-center gap-1">
+          📥 <span class="hidden sm:inline">Install</span>
+        </button>
+
+        <!-- Sound Toggle -->
+        <button id="soundToggleBtn" onclick="toggleSound()" class="p-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 text-xs font-semibold flex items-center transition-all cursor-pointer">
+          <span id="soundIcon">🔊</span>
+        </button>
+
+        <!-- Shop & Collection Trigger -->
+        <button onclick="showView('collection')" class="p-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-purple-400 border border-slate-700 text-xs font-semibold flex items-center transition-all cursor-pointer" title="Collection & Shop">
+          🎒
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN SCROLLABLE CONTAINER -->
+  <main class="flex-1 w-full max-w-md mx-auto p-4 flex flex-col justify-start relative overflow-y-auto">
+
+    <!-- ========================================================================= -->
+    <!-- 1. HOME VIEW & REWARD TRACK -->
+    <!-- ========================================================================= -->
+    <div id="homeView" class="w-full flex flex-col gap-3.5 pb-6">
+
+      <!-- REWARD TRACK (MARQUEE FEATURE) -->
+      <div class="glass-panel rounded-2xl p-3.5 border border-cyan-500/30 relative overflow-hidden shadow-lg">
+        <div class="flex justify-between items-center mb-2">
+          <div class="flex items-center gap-1.5">
+            <span class="text-xs font-black uppercase tracking-wider text-cyan-400 flex items-center gap-1">
+              🏆 REWARD TRACK
+            </span>
+            <span class="text-[10px] font-mono text-slate-400">· Infinite Levels</span>
+          </div>
+          <span id="rewardNextDistance" class="text-[10px] font-mono font-bold text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/20">
+            Lvl 5 in 4 lvls
+          </span>
+        </div>
+
+        <!-- Horizontal Reward Strip: [Current] -> [NEXT (Glowing + Bar)] -> [Locked 1] -> [Locked 2] -->
+        <div class="grid grid-cols-3 gap-2 items-stretch my-2">
+          <!-- CARD 1: Most Recent Claimed -->
+          <div id="rewardSlotPrev" class="bg-slate-900/60 border border-slate-800 rounded-xl p-2 flex flex-col items-center text-center justify-between opacity-70">
+            <span class="text-[8px] font-mono text-emerald-400 font-bold uppercase">Claimed</span>
+            <div id="prevRewardIcon" class="text-xl my-1">📦</div>
+            <span id="prevRewardName" class="text-[9px] font-bold text-slate-300 truncate w-full">Starter Pack</span>
+            <span id="prevRewardLvl" class="text-[8px] font-mono text-slate-500">Lvl 1</span>
+          </div>
+
+          <!-- CARD 2: NEXT REWARD (GLOWING BORDER + PROGRESS BAR) -->
+          <div id="rewardSlotNext" class="bg-gradient-to-b from-cyan-950/60 to-slate-900 border-2 border-cyan-400 rounded-xl p-2.5 flex flex-col items-center text-center justify-between shadow-[0_0_15px_rgba(6,182,212,0.4)] relative">
+            <div class="absolute -top-2 left-1/2 -translate-x-1/2 bg-cyan-500 text-black text-[8px] font-black uppercase px-1.5 py-0.2 rounded-full tracking-wider whitespace-nowrap">
+              NEXT UNLOCK
+            </div>
+            <div id="nextRewardIcon" class="text-2xl mt-1 my-0.5 animate-bounce-short">🎨</div>
+            <span id="nextRewardName" class="text-[10px] font-black text-white truncate w-full">Neon Matrix</span>
+            <span id="nextRewardTier" class="text-[8px] font-mono text-cyan-300 font-bold">Theme · Lvl 5</span>
+
+            <!-- Progress to next reward -->
+            <div class="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden mt-1 border border-cyan-500/20">
+              <div id="rewardProgressBar" class="bg-gradient-to-r from-cyan-400 to-amber-400 h-full transition-all duration-300" style="width: 20%;"></div>
+            </div>
+            <span id="rewardProgressText" class="text-[8px] font-mono text-slate-400 mt-0.5">Lvl 1 / 5</span>
+          </div>
+
+          <!-- CARD 3: LOCKED SILHOUETTE (???) -->
+          <div id="rewardSlotLocked1" class="bg-slate-900/40 border border-slate-800/80 rounded-xl p-2 flex flex-col items-center text-center justify-between opacity-50">
+            <span class="text-[8px] font-mono text-slate-500 font-bold uppercase">Locked</span>
+            <div id="locked1Icon" class="text-xl my-1 text-slate-600">🔒</div>
+            <span id="locked1Name" class="text-[9px] font-bold text-slate-500">???</span>
+            <span id="locked1Lvl" class="text-[8px] font-mono text-slate-600">Lvl 10</span>
+          </div>
+        </div>
+
+        <!-- Global Level & XP Bar -->
+        <div class="mt-2 pt-2 border-t border-slate-800/60 flex items-center justify-between text-[10px] font-mono text-slate-400">
+          <div>
+            LEVEL <span id="hubLevelDisplay" class="font-bold text-cyan-400">1</span>
+          </div>
+          <div>
+            XP: <span id="hubXpCurrent" class="text-white font-bold">0</span> / <span id="hubXpTarget" class="text-slate-400">100</span>
+          </div>
+        </div>
+        <div class="w-full bg-slate-950 h-2 rounded-full overflow-hidden border border-slate-800 mt-1">
+          <div id="hubLevelXpBar" class="bg-gradient-to-r from-cyan-500 to-purple-500 h-full transition-all duration-300" style="width: 0%;"></div>
+        </div>
+      </div>
+
+      <!-- ARENA GAME MODES -->
+      <div class="space-y-3">
+        <!-- MODE 1: REFLEX SPEED -->
+        <div onclick="startReflexMode()" class="glass-panel rounded-2xl p-4 flex items-center gap-3.5 cursor-pointer hover:border-cyan-500/50 active:scale-98 transition-all group">
+          <div class="w-12 h-12 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400 text-2xl group-hover:bg-cyan-500 group-hover:text-black transition-all shrink-0">
+            ⏱️
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="flex justify-between items-center">
+              <h3 class="font-bold text-sm text-white group-hover:text-cyan-400 transition-colors">
+                Reflex Speed Test
+              </h3>
+              <span id="homeBestReflex" class="text-[11px] font-mono font-bold text-cyan-400 bg-slate-800/80 px-2 py-0.5 rounded border border-slate-700 tabular-nums shrink-0">
+                Best: -- ms
+              </span>
+            </div>
+            <p class="text-[11px] text-slate-400 mt-0.5 truncate">
+              Tap instantly when screen flashes green. Early taps penalized!
+            </p>
+          </div>
+        </div>
+
+        <!-- MODE 2: SIMON MEMORY -->
+        <div onclick="startMemoryMode()" class="glass-panel rounded-2xl p-4 flex items-center gap-3.5 cursor-pointer hover:border-purple-500/50 active:scale-98 transition-all group">
+          <div class="w-12 h-12 rounded-xl bg-purple-500/10 border border-purple-500/30 flex items-center justify-center text-purple-400 text-2xl group-hover:bg-purple-500 group-hover:text-black transition-all shrink-0">
+            🧠
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="flex justify-between items-center">
+              <h3 class="font-bold text-sm text-white group-hover:text-purple-400 transition-colors">
+                Pattern Memory Match
+              </h3>
+              <span id="homeBestMemory" class="text-[11px] font-mono font-bold text-purple-400 bg-slate-800/80 px-2 py-0.5 rounded border border-slate-700 tabular-nums shrink-0">
+                Best: Lvl 0
+              </span>
+            </div>
+            <p class="text-[11px] text-slate-400 mt-0.5 truncate">
+              Simon-says audio-visual grid. 10-streak unlocks Streak Shield!
+            </p>
+          </div>
+        </div>
+
+        <!-- MODE 3: SPEED MATH QUIZ -->
+        <div onclick="startMathMode()" class="glass-panel rounded-2xl p-4 flex items-center gap-3.5 cursor-pointer hover:border-rose-500/50 active:scale-98 transition-all group">
+          <div class="w-12 h-12 rounded-xl bg-rose-500/10 border border-rose-500/30 flex items-center justify-center text-rose-400 text-2xl group-hover:bg-rose-500 group-hover:text-black transition-all shrink-0">
+            🔥
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="flex justify-between items-center">
+              <h3 class="font-bold text-sm text-white group-hover:text-rose-400 transition-colors">
+                Speed Math Blitz
+              </h3>
+              <span id="homeBestMath" class="text-[11px] font-mono font-bold text-rose-400 bg-slate-800/80 px-2 py-0.5 rounded border border-slate-700 tabular-nums shrink-0">
+                Best: 0 Pts
+              </span>
+            </div>
+            <p class="text-[11px] text-slate-400 mt-0.5 truncate">
+              15-second blitz round with combo multipliers & rapid arithmetic.
+            </p>
+          </div>
+        </div>
+        <!-- MODE 4: BOT DUEL (1v1) -->
+        <div id="botDuelModeCard" onclick="handleBotDuelCardClick()" class="glass-panel rounded-2xl p-4 flex items-center gap-3.5 cursor-pointer border border-amber-500/30 hover:border-amber-400/60 active:scale-98 transition-all group relative overflow-hidden">
+          <div id="botDuelIconContainer" class="w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 text-2xl group-hover:bg-amber-500 group-hover:text-black transition-all shrink-0">
+            ⚔️
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="flex justify-between items-center">
+              <div class="flex items-center gap-1.5">
+                <h3 class="font-bold text-sm text-white group-hover:text-amber-400 transition-colors">
+                  Bot Duel (1v1)
+                </h3>
+                <span id="botDuelLockBadge" class="text-[9px] font-mono px-1.5 py-0.2 rounded bg-amber-500/10 text-amber-300 border border-amber-500/30">
+                  40 Ranks
+                </span>
+              </div>
+              <span id="homeBotDuelStatus" class="text-[11px] font-mono font-bold text-amber-400 bg-slate-800/80 px-2 py-0.5 rounded border border-slate-700 tabular-nums shrink-0">
+                Rank 1
+              </span>
+            </div>
+            <p id="botDuelDesc" class="text-[11px] text-slate-400 mt-0.5 truncate">
+              Speed Math race vs 40 neural bot ranks. Best of 5 points wins!
+            </p>
+            <!-- Locked Progress Bar (shown when player level < 10) -->
+            <div id="botDuelLockProgressContainer" class="hidden mt-2 pt-1 border-t border-slate-800/80">
+              <div class="flex justify-between items-center text-[9px] font-mono mb-1 text-slate-400">
+                <span class="flex items-center gap-1 text-amber-300 font-bold">🔒 Reach Level 10 to unlock</span>
+                <span id="botDuelUnlockProgressText" class="text-slate-300 font-bold">Lvl 1 / 10</span>
+              </div>
+              <div class="w-full bg-slate-900 h-1.5 rounded-full overflow-hidden border border-amber-500/20">
+                <div id="botDuelUnlockProgressBar" class="bg-gradient-to-r from-amber-500 to-rose-500 h-full transition-all duration-300" style="width: 10%;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Career Nav Links -->
+      <div class="grid grid-cols-3 gap-2 mt-1">
+        <button onclick="showView('collection')" class="py-2.5 px-2 glass-panel rounded-xl text-xs font-bold text-slate-300 hover:text-white flex items-center justify-center gap-1 hover:border-slate-700 transition-all cursor-pointer">
+          🎒 <span class="truncate">Collection</span>
+        </button>
+        <button onclick="showView('ladder')" class="py-2.5 px-2 glass-panel rounded-xl text-xs font-bold text-cyan-300 hover:text-cyan-200 flex items-center justify-center gap-1 hover:border-cyan-500/30 transition-all cursor-pointer">
+          🏆 <span class="truncate">Rank Ladder</span>
+        </button>
+        <button onclick="showView('shop')" class="py-2.5 px-2 glass-panel rounded-xl text-xs font-bold text-amber-300 hover:text-amber-200 flex items-center justify-center gap-1 hover:border-amber-500/30 transition-all cursor-pointer">
+          🛒 <span class="truncate">Shop</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- 2. REFLEX SPEED VIEW -->
+    <!-- ========================================================================= -->
+    <div id="reflexView" class="hidden w-full flex-1 flex flex-col justify-between py-1">
+      <div class="flex justify-between items-center mb-2">
+        <button onclick="showView('home')" class="px-3 py-1.5 bg-slate-900 text-slate-300 text-xs font-semibold rounded-lg hover:bg-slate-800 border border-slate-800 flex items-center gap-1 cursor-pointer">
+          ← Exit
+        </button>
+        <div class="text-right">
+          <span class="text-[10px] text-slate-400 font-bold uppercase tracking-widest block">Personal Best</span>
+          <span id="reflexPbDisplay" class="text-xs font-mono font-bold text-cyan-400">-- ms</span>
+        </div>
+      </div>
+
+      <!-- Big Tap Pad -->
+      <div id="reflexPad" onclick="handleReflexTap()" class="flex-1 my-3 rounded-3xl bg-slate-900 border-2 border-slate-800 flex flex-col items-center justify-center p-6 text-center cursor-pointer transition-all shadow-2xl select-none min-h-[320px]">
+        <div id="reflexIcon" class="text-5xl mb-3">👆</div>
+        <h3 id="reflexMainText" class="text-2xl font-black uppercase text-white tracking-tight">TAP TO START</h3>
+        <p id="reflexSubText" class="text-xs text-slate-400 mt-2 max-w-[220px]">When the box turns GREEN, tap as fast as possible!</p>
+      </div>
+
+      <!-- Last Result Strip -->
+      <div class="glass-panel rounded-2xl p-3 flex justify-between items-center text-center">
+        <div class="flex-1">
+          <span class="text-slate-400 text-[10px] block font-semibold uppercase">Last Reaction</span>
+          <span id="reflexLastResult" class="font-mono font-bold text-white text-sm tabular-nums">-- ms</span>
+        </div>
+        <div class="h-6 w-px bg-slate-800"></div>
+        <div class="flex-1">
+          <span class="text-slate-400 text-[10px] block font-semibold uppercase">Rating</span>
+          <span id="reflexRatingResult" class="font-bold text-amber-400 text-sm">--</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- 3. PATTERN MEMORY VIEW -->
+    <!-- ========================================================================= -->
+    <div id="memoryView" class="hidden w-full flex-1 flex flex-col justify-between py-1">
+      <div class="flex justify-between items-center mb-2">
+        <button onclick="showView('home')" class="px-3 py-1.5 bg-slate-900 text-slate-300 text-xs font-semibold rounded-lg hover:bg-slate-800 border border-slate-800 flex items-center gap-1 cursor-pointer">
+          ← Exit
+        </button>
+        <div class="flex items-center gap-2">
+          <!-- Active Shield in Game -->
+          <div id="memShieldIndicator" class="hidden items-center gap-1 px-2 py-0.5 rounded bg-amber-500/20 border border-amber-500/40 text-[10px] text-amber-300 font-bold">
+            🛡️ Shield Ready
+          </div>
+          <span id="memStatusText" class="text-xs font-bold text-purple-400">Press Start</span>
+        </div>
+        <div class="text-right">
+          <span class="text-[10px] text-slate-400 font-bold uppercase tracking-widest block">Streak</span>
+          <span id="memStreakDisplay" class="text-xs font-bold text-amber-400 font-mono">0 / 10</span>
+        </div>
+      </div>
+
+      <!-- 2x2 Simon Memory Grid with Skin Classes -->
+      <div id="simonGridContainer" class="w-full aspect-square my-auto p-3.5 glass-panel rounded-3xl grid grid-cols-2 gap-3.5 shadow-2xl">
+        <button id="memPad0" onclick="handleMemoryPadTap(0)" class="rounded-2xl bg-cyan-500/20 border-2 border-cyan-500/40 active:scale-95 transition-all shadow-lg flex items-center justify-center text-3xl font-mono font-bold text-cyan-300">1</button>
+        <button id="memPad1" onclick="handleMemoryPadTap(1)" class="rounded-2xl bg-purple-500/20 border-2 border-purple-500/40 active:scale-95 transition-all shadow-lg flex items-center justify-center text-3xl font-mono font-bold text-purple-300">2</button>
+        <button id="memPad2" onclick="handleMemoryPadTap(2)" class="rounded-2xl bg-emerald-500/20 border-2 border-emerald-500/40 active:scale-95 transition-all shadow-lg flex items-center justify-center text-3xl font-mono font-bold text-emerald-300">3</button>
+        <button id="memPad3" onclick="handleMemoryPadTap(3)" class="rounded-2xl bg-amber-500/20 border-2 border-amber-500/40 active:scale-95 transition-all shadow-lg flex items-center justify-center text-3xl font-mono font-bold text-amber-300">4</button>
+      </div>
+
+      <button id="memStartBtn" onclick="startMemoryGame()" class="w-full py-3.5 bg-purple-600 hover:bg-purple-500 text-white font-bold rounded-2xl shadow-lg shadow-purple-600/30 active:scale-98 transition-all cursor-pointer">
+        START PATTERN MATCH
+      </button>
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- 4. SPEED MATH VIEW -->
+    <!-- ========================================================================= -->
+    <div id="mathView" class="hidden w-full flex-1 flex flex-col justify-between py-1">
+      <div class="flex justify-between items-center mb-2">
+        <button onclick="showView('home')" class="px-3 py-1.5 bg-slate-900 text-slate-300 text-xs font-semibold rounded-lg hover:bg-slate-800 border border-slate-800 flex items-center gap-1 cursor-pointer">
+          ← Exit
+        </button>
+        <div class="text-center">
+          <span class="text-xs font-bold text-amber-400 font-mono"><span id="mathStreakDisplay">0</span>x Combo</span>
+        </div>
+        <div class="text-right">
+          <span class="text-[10px] text-slate-400 font-bold uppercase tracking-widest block">Score</span>
+          <span id="mathScoreDisplay" class="text-sm font-bold text-rose-400 font-mono tabular-nums">0</span>
+        </div>
+      </div>
+
+      <!-- Time Bar -->
+      <div class="w-full bg-slate-900 h-2 rounded-full overflow-hidden mb-2 border border-slate-800">
+        <div id="mathTimeBar" class="bg-gradient-to-r from-rose-500 to-amber-500 h-full w-full transition-all duration-100 ease-linear"></div>
+      </div>
+
+      <!-- Math Question Panel -->
+      <div id="mathPanel" class="glass-panel rounded-3xl p-6 flex flex-col items-center justify-center text-center my-auto min-h-[140px] shadow-xl border border-slate-800">
+        <span class="text-[10px] font-bold text-rose-400 uppercase tracking-widest bg-rose-500/10 px-2 py-0.5 rounded border border-rose-500/20 mb-2">15s Blitz Round</span>
+        <h3 id="mathQuestionText" class="text-3xl sm:text-4xl font-mono font-black text-white tracking-wide">Press Start!</h3>
+      </div>
+
+      <!-- 4 Options Grid -->
+      <div id="mathOptionsGrid" class="grid grid-cols-2 gap-2.5 my-2">
+        <button onclick="handleMathOptionTap(0)" class="math-opt py-4 glass-panel hover:bg-slate-800 rounded-2xl border border-slate-700 font-mono text-xl font-bold text-white transition-all active:scale-95 opacity-40 cursor-pointer" disabled>--</button>
+        <button onclick="handleMathOptionTap(1)" class="math-opt py-4 glass-panel hover:bg-slate-800 rounded-2xl border border-slate-700 font-mono text-xl font-bold text-white transition-all active:scale-95 opacity-40 cursor-pointer" disabled>--</button>
+        <button onclick="handleMathOptionTap(2)" class="math-opt py-4 glass-panel hover:bg-slate-800 rounded-2xl border border-slate-700 font-mono text-xl font-bold text-white transition-all active:scale-95 opacity-40 cursor-pointer" disabled>--</button>
+        <button onclick="handleMathOptionTap(3)" class="math-opt py-4 glass-panel hover:bg-slate-800 rounded-2xl border border-slate-700 font-mono text-xl font-bold text-white transition-all active:scale-95 opacity-40 cursor-pointer" disabled>--</button>
+      </div>
+
+      <button id="mathStartBtn" onclick="startMathGame()" class="w-full py-3.5 bg-rose-600 hover:bg-rose-500 text-white font-bold rounded-2xl shadow-lg shadow-rose-600/30 active:scale-98 transition-all cursor-pointer">
+        START MATH BLITZ
+      </button>
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- 5. COLLECTION & REWARD EQUIPPING VIEW (WITH SAVED QUOTES TAB) -->
+    <!-- ========================================================================= -->
+    <div id="collectionView" class="hidden w-full flex-1 flex flex-col justify-start py-1">
+      <div class="flex justify-between items-center mb-3">
+        <button onclick="showView('home')" class="px-3 py-1.5 bg-slate-900 text-slate-300 text-xs font-semibold rounded-lg hover:bg-slate-800 border border-slate-800 flex items-center gap-1 cursor-pointer">
+          ← Back
+        </button>
+        <h3 class="text-sm font-black text-white uppercase tracking-wider">My Collection</h3>
+        <span class="text-xs text-amber-400 font-mono">🪙 <span id="collCoinsDisplay">0</span></span>
+      </div>
+
+      <!-- Sub Tabs: Cosmetics vs Saved Quotes -->
+      <div class="flex items-center gap-1 p-1 bg-slate-900 rounded-xl border border-slate-800 mb-3">
+        <button id="tabCosmeticsBtn" onclick="switchCollectionTab('cosmetics')" class="flex-1 py-1.5 rounded-lg text-xs font-bold transition-all bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">
+          🎨 Cosmetics
+        </button>
+        <button id="tabQuotesBtn" onclick="switchCollectionTab('quotes')" class="flex-1 py-1.5 rounded-lg text-xs font-bold transition-all text-slate-400 hover:text-white">
+          ❤️ Saved Quotes (<span id="savedQuotesCount">0</span>)
+        </button>
+      </div>
+
+      <!-- Tab A: Cosmetics -->
+      <div id="collCosmeticsSection" class="space-y-4">
+        <!-- Themes -->
+        <div>
+          <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest block mb-1.5">Color Themes</span>
+          <div id="themeList" class="grid grid-cols-2 gap-2"></div>
+        </div>
+
+        <!-- Sound Packs -->
+        <div>
+          <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest block mb-1.5">Synthesizer Sound Packs</span>
+          <div id="soundPackList" class="grid grid-cols-2 gap-2"></div>
+        </div>
+
+        <!-- Titles -->
+        <div>
+          <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest block mb-1.5">Player Titles & Badges</span>
+          <div id="titleList" class="flex flex-wrap gap-2"></div>
+        </div>
+      </div>
+
+      <!-- Tab B: Saved Quotes -->
+      <div id="collQuotesSection" class="hidden space-y-2.5 pb-4">
+        <div id="savedQuotesList" class="space-y-2"></div>
+      </div>
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- 6. ARENA SHOP VIEW -->
+    <!-- ========================================================================= -->
+    <div id="shopView" class="hidden w-full flex-1 flex flex-col justify-start py-1">
+      <div class="flex justify-between items-center mb-3">
+        <button onclick="showView('home')" class="px-3 py-1.5 bg-slate-900 text-slate-300 text-xs font-semibold rounded-lg hover:bg-slate-800 border border-slate-800 flex items-center gap-1 cursor-pointer">
+          ← Back
+        </button>
+        <h3 class="text-sm font-black text-amber-400 uppercase tracking-wider">Arena Shop</h3>
+        <span class="text-xs text-amber-400 font-mono">🪙 <span id="shopCoinsDisplay">0</span></span>
+      </div>
+
+      <p class="text-[11px] text-slate-400 mb-3">Zero paywalls, zero ads. Everything is earned through skill & playtime.</p>
+
+      <div class="space-y-2.5">
+        <div class="glass-panel p-3.5 rounded-2xl flex items-center justify-between border border-slate-800">
+          <div class="flex items-center gap-3">
+            <span class="text-3xl">🛡️</span>
+            <div>
+              <h4 class="text-xs font-bold text-white">Pattern Streak Shield</h4>
+              <p class="text-[10px] text-slate-400">Protects from 1 mistake in Memory mode. Max 1.</p>
+            </div>
+          </div>
+          <button id="buyShieldBtn" onclick="buyStreakShield()" class="px-3 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-black text-xs font-bold cursor-pointer transition-all">
+            400 🪙
+          </button>
+        </div>
+
+        <div class="glass-panel p-3.5 rounded-2xl flex items-center justify-between border border-slate-800">
+          <div class="flex items-center gap-3">
+            <span class="text-3xl">⚡</span>
+            <div>
+              <h4 class="text-xs font-bold text-white">Neural Booster (5 Games)</h4>
+              <p class="text-[10px] text-slate-400">+50% Coins & XP gained for 5 games.</p>
+            </div>
+          </div>
+          <button id="buyBoosterBtn" onclick="buyBooster()" class="px-3 py-1.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-black text-xs font-bold cursor-pointer transition-all">
+            250 🪙
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- 7. BOT DUEL VIEW (1v1 SPEED MATH RACE) -->
+    <!-- ========================================================================= -->
+    <div id="duelView" class="hidden w-full flex-1 flex flex-col justify-between py-1">
+      <!-- Duel Header & Rank Strip -->
+      <div class="flex justify-between items-center mb-2">
+        <button onclick="showView('home')" class="px-3 py-1.5 bg-slate-900 text-slate-300 text-xs font-semibold rounded-lg hover:bg-slate-800 border border-slate-800 flex items-center gap-1 cursor-pointer">
+          ← Exit
+        </button>
+        <div class="flex items-center gap-2">
+          <!-- Player Rank Badge -->
+          <div class="flex items-center gap-1.5 px-2 py-0.5 rounded-lg bg-slate-900/90 border border-slate-800">
+            <div id="duelPlayerBadgeSmall" class="w-5 h-5 flex items-center justify-center shrink-0"></div>
+            <span id="duelPlayerRankText" class="text-[10px] font-mono font-bold text-slate-200">Rookie 1</span>
+          </div>
+        </div>
+        <button onclick="showView('ladder')" class="px-2.5 py-1.5 bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-300 text-xs font-bold rounded-lg border border-cyan-500/30 flex items-center gap-1 cursor-pointer transition-all">
+          🏆 <span>Ladder</span>
+        </button>
+      </div>
+
+      <!-- Duel Reward Track Strip (Mini Marquee) -->
+      <div class="glass-panel p-2.5 rounded-2xl border border-amber-500/30 mb-2 relative overflow-hidden">
+        <div class="flex justify-between items-center text-[10px] font-mono mb-1.5">
+          <span class="text-amber-400 font-bold flex items-center gap-1">
+            ⚔️ DUEL RANK TRACK
+          </span>
+          <span id="duelTrackProgressText" class="text-slate-400">Next Tier at Lvl 6</span>
+        </div>
+        <div class="grid grid-cols-3 gap-2 text-center text-[9px] font-mono">
+          <div id="duelTrackSlotPrev" class="bg-slate-900/70 border border-slate-800 rounded-xl p-1.5 opacity-70">
+            <span class="text-[8px] text-emerald-400 block font-bold">CURRENT</span>
+            <div id="duelTrackPrevBadge" class="w-6 h-6 mx-auto my-0.5 flex items-center justify-center"></div>
+            <span id="duelTrackPrevName" class="truncate block text-slate-300">Rookie</span>
+          </div>
+          <div id="duelTrackSlotNext" class="bg-amber-950/40 border-2 border-amber-400 rounded-xl p-1.5 shadow-[0_0_12px_rgba(245,158,11,0.3)] relative">
+            <span class="text-[8px] text-amber-300 block font-bold uppercase">NEXT TIER</span>
+            <div id="duelTrackNextBadge" class="w-6 h-6 mx-auto my-0.5 flex items-center justify-center animate-bounce-short"></div>
+            <span id="duelTrackNextName" class="truncate block text-white font-bold">Spark</span>
+            <div class="w-full bg-slate-800 h-1 rounded-full overflow-hidden mt-1">
+              <div id="duelTrackProgressBar" class="bg-gradient-to-r from-amber-400 to-cyan-400 h-full" style="width: 20%;"></div>
+            </div>
+          </div>
+          <div id="duelTrackSlotLocked" class="bg-slate-900/40 border border-slate-800 rounded-xl p-1.5 opacity-50">
+            <span class="text-[8px] text-slate-500 block font-bold uppercase">LATER</span>
+            <div class="w-6 h-6 mx-auto my-0.5 text-xs text-slate-600 flex items-center justify-center">🔒</div>
+            <span id="duelTrackLockedName" class="truncate block text-slate-500">???</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Matchup Arena Header: Player VS Bot -->
+      <div class="glass-panel rounded-2xl p-3 border border-slate-800 mb-2">
+        <div class="flex items-center justify-between">
+          <!-- Player Side -->
+          <div class="flex items-center gap-2 flex-1">
+            <div id="duelPlayerAvatarBadge" class="w-10 h-10 flex items-center justify-center shrink-0"></div>
+            <div class="min-w-0">
+              <span class="text-[10px] text-slate-400 font-bold block uppercase">YOU</span>
+              <h4 id="duelPlayerNameLabel" class="text-xs font-bold text-white truncate">Rookie 1</h4>
+            </div>
+          </div>
+
+          <!-- VS Center & Score -->
+          <div class="text-center px-3 py-1 bg-slate-900/90 rounded-xl border border-slate-800 shrink-0">
+            <div class="text-[9px] font-mono text-slate-400 tracking-widest font-bold">FIRST TO 3</div>
+            <div class="flex items-center justify-center gap-2 my-0.5">
+              <span id="duelPlayerScore" class="font-mono font-black text-2xl text-cyan-400 tabular-nums">0</span>
+              <span class="text-xs text-slate-500 font-bold">:</span>
+              <span id="duelBotScore" class="font-mono font-black text-2xl text-amber-400 tabular-nums">0</span>
+            </div>
+            <!-- Score Pips: 3 for Player, 3 for Bot -->
+            <div class="flex items-center justify-center gap-2 text-[8px]">
+              <div id="duelPlayerPips" class="flex gap-1">
+                <span class="w-1.5 h-1.5 rounded-full bg-slate-800 border border-slate-700"></span>
+                <span class="w-1.5 h-1.5 rounded-full bg-slate-800 border border-slate-700"></span>
+                <span class="w-1.5 h-1.5 rounded-full bg-slate-800 border border-slate-700"></span>
+              </div>
+              <span class="text-slate-600">·</span>
+              <div id="duelBotPips" class="flex gap-1">
+                <span class="w-1.5 h-1.5 rounded-full bg-slate-800 border border-slate-700"></span>
+                <span class="w-1.5 h-1.5 rounded-full bg-slate-800 border border-slate-700"></span>
+                <span class="w-1.5 h-1.5 rounded-full bg-slate-800 border border-slate-700"></span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bot Side -->
+          <div class="flex items-center justify-end gap-2 flex-1 text-right">
+            <div class="min-w-0">
+              <span class="text-[10px] text-amber-400 font-bold block uppercase">OPPONENT</span>
+              <h4 id="duelBotNameLabel" class="text-xs font-bold text-white truncate">Rookie 1 Bot</h4>
+            </div>
+            <div id="duelBotAvatarBadge" class="w-10 h-10 flex items-center justify-center shrink-0"></div>
+          </div>
+        </div>
+
+        <!-- Bot Thinking Progress Bar -->
+        <div class="mt-2.5 pt-2 border-t border-slate-800/80">
+          <div class="flex justify-between items-center text-[9px] font-mono mb-1">
+            <span class="text-slate-400 flex items-center gap-1">
+              🤖 <span id="duelBotThinkingLabel">Bot Status: Ready</span>
+            </span>
+            <span id="duelBotSpeedEst" class="text-amber-400 font-bold">Speed: ~5.8s</span>
+          </div>
+          <div class="w-full bg-slate-900 h-2 rounded-full overflow-hidden border border-slate-800">
+            <div id="duelBotProgressBar" class="h-full bg-gradient-to-r from-amber-500 to-rose-500 transition-all duration-100 ease-linear" style="width: 0%;"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Lockout Alert Banner (Shown during 1-sec penalty) -->
+      <div id="duelLockoutBanner" class="hidden glass-panel p-2 rounded-xl bg-rose-950/60 border border-rose-500/60 text-center text-xs font-bold text-rose-300 animate-pulse my-1">
+        ⛔ WRONG! Locked out for <span id="duelLockoutTime">1.0</span>s — Bot can steal point!
+      </div>
+
+      <!-- Round Status Toast -->
+      <div id="duelRoundToast" class="hidden glass-panel p-2 rounded-xl text-center text-xs font-bold my-1">
+        <!-- Dynamic message -->
+      </div>
+
+      <!-- Duel Active Arena Area -->
+      <div id="duelArenaBody" class="flex-1 flex flex-col justify-center my-1 relative">
+        <!-- 1. PRE-GAME MATCHUP / IDLE CARD -->
+        <div id="duelPreGameCard" class="glass-panel rounded-3xl p-6 text-center border border-slate-800 flex flex-col items-center justify-center my-auto shadow-2xl">
+          <div id="duelMatchupHeroBadge" class="w-20 h-20 mb-3 flex items-center justify-center"></div>
+          <span id="duelBotTierSubtitle" class="text-[10px] font-mono text-amber-400 font-bold uppercase tracking-widest bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/20 mb-1">
+            BOT RANK 1 / 40
+          </span>
+          <h3 id="duelBotHeroName" class="text-xl font-black text-white">Rookie 1 Bot</h3>
+          <p id="duelBotHeroDesc" class="text-xs text-slate-400 mt-1 max-w-xs">
+            Same math question, pure reaction race. First correct answer takes the point.
+          </p>
+          <div class="grid grid-cols-2 gap-3 w-full max-w-xs my-4 text-[10px] font-mono">
+            <div class="bg-slate-900/80 p-2 rounded-xl border border-slate-800">
+              <span class="text-slate-500 block">Format</span>
+              <strong class="text-white">Best of 5</strong>
+            </div>
+            <div class="bg-slate-900/80 p-2 rounded-xl border border-slate-800">
+              <span class="text-slate-500 block">Mistake Lockout</span>
+              <strong class="text-rose-400">1.0 Second</strong>
+            </div>
+          </div>
+          <button id="duelStartBtn" onclick="startBotDuelMatch()" class="w-full max-w-xs py-3.5 bg-gradient-to-r from-amber-500 to-rose-600 hover:from-amber-400 hover:to-rose-500 text-black font-black text-xs tracking-wider uppercase rounded-2xl shadow-[0_0_20px_rgba(245,158,11,0.4)] active:scale-98 transition-all cursor-pointer">
+            START 1v1 DUEL
+          </button>
+        </div>
+
+        <!-- 2. COUNTDOWN OVERLAY ("3, 2, 1, GO!") -->
+        <div id="duelCountdownOverlay" class="hidden absolute inset-0 glass-panel rounded-3xl flex flex-col items-center justify-center z-20">
+          <span id="duelCountdownNumber" class="text-7xl font-mono font-black text-amber-400 animate-bounce-short">
+            3
+          </span>
+          <span class="text-xs font-mono uppercase tracking-widest text-slate-400 mt-2">Get Ready...</span>
+        </div>
+
+        <!-- 3. QUESTION PANEL & 4 OPTIONS -->
+        <div id="duelQuestionContainer" class="hidden flex-1 flex flex-col justify-between">
+          <div id="duelQuestionPanel" class="glass-panel rounded-3xl p-5 flex flex-col items-center justify-center text-center my-auto min-h-[120px] shadow-xl border border-slate-800">
+            <span class="text-[9px] font-mono font-bold text-cyan-400 uppercase tracking-widest bg-cyan-500/10 px-2 py-0.5 rounded border border-cyan-500/20 mb-1.5">1v1 Speed Math Race</span>
+            <h3 id="duelQuestionText" class="text-3xl sm:text-4xl font-mono font-black text-white tracking-wide">
+              12 + 15 = ?
+            </h3>
+          </div>
+
+          <div id="duelOptionsGrid" class="grid grid-cols-2 gap-2.5 my-2">
+            <button onclick="handleDuelPlayerOptionTap(0)" class="duel-opt py-4 glass-panel hover:bg-slate-800 rounded-2xl border border-slate-700 font-mono text-xl font-bold text-white transition-all active:scale-95 cursor-pointer">--</button>
+            <button onclick="handleDuelPlayerOptionTap(1)" class="duel-opt py-4 glass-panel hover:bg-slate-800 rounded-2xl border border-slate-700 font-mono text-xl font-bold text-white transition-all active:scale-95 cursor-pointer">--</button>
+            <button onclick="handleDuelPlayerOptionTap(2)" class="duel-opt py-4 glass-panel hover:bg-slate-800 rounded-2xl border border-slate-700 font-mono text-xl font-bold text-white transition-all active:scale-95 cursor-pointer">--</button>
+            <button onclick="handleDuelPlayerOptionTap(3)" class="duel-opt py-4 glass-panel hover:bg-slate-800 rounded-2xl border border-slate-700 font-mono text-xl font-bold text-white transition-all active:scale-95 cursor-pointer">--</button>
+          </div>
+        </div>
+
+        <!-- 4. MATCH FINISHED CARD (VICTORY / DEFEAT) -->
+        <div id="duelResultCard" class="hidden glass-panel rounded-3xl p-6 text-center border flex flex-col items-center justify-center my-auto shadow-2xl">
+          <div id="duelResultIcon" class="text-5xl mb-2">🏆</div>
+          <span id="duelResultSubtitle" class="text-[10px] font-mono font-bold uppercase tracking-widest text-emerald-400">
+            MATCH RESULT
+          </span>
+          <h3 id="duelResultTitle" class="text-2xl font-black text-white mt-1">DUEL VICTORY!</h3>
+          <p id="duelResultScoreText" class="text-sm font-mono font-bold text-slate-300 mt-1">Final Score: 3 — 1</p>
+          <div id="duelResultRewardsBox" class="flex items-center justify-center gap-3 my-3 text-xs font-mono">
+            <span class="px-2.5 py-1 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-300 font-bold">
+              +<span id="duelWonCoins">35</span> 🪙 Coins
+            </span>
+            <span class="px-2.5 py-1 rounded-xl bg-cyan-500/10 border border-cyan-500/30 text-cyan-300 font-bold">
+              +<span id="duelWonXp">60</span> XP
+            </span>
+          </div>
+          <p id="duelResultNextText" class="text-xs text-slate-400 mb-4">
+            Advanced to Rookie 2!
+          </p>
+          <div class="flex gap-2 w-full max-w-xs">
+            <button id="duelNextActionBtn" onclick="handleDuelNextAction()" class="flex-1 py-3 bg-gradient-to-r from-amber-500 to-rose-600 hover:from-amber-400 hover:to-rose-500 text-black font-black text-xs uppercase rounded-xl shadow-lg cursor-pointer transition-all active:scale-98">
+              NEXT DUEL
+            </button>
+            <button onclick="showView('home')" class="px-4 py-3 bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs uppercase rounded-xl border border-slate-700 cursor-pointer">
+              HUB
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- 8. RANK LADDER VIEW (40 STEPS · 8 TIERS) -->
+    <!-- ========================================================================= -->
+    <div id="ladderView" class="hidden w-full flex-1 flex flex-col justify-start py-1">
+      <div class="flex justify-between items-center mb-3">
+        <button onclick="showView('duel')" class="px-3 py-1.5 bg-slate-900 text-slate-300 text-xs font-semibold rounded-lg hover:bg-slate-800 border border-slate-800 flex items-center gap-1 cursor-pointer">
+          ← Back to Duel
+        </button>
+        <h3 class="text-sm font-black text-white uppercase tracking-wider flex items-center gap-1.5">
+          🏆 <span>Rank Ladder</span>
+        </h3>
+        <span class="text-xs font-mono text-cyan-400">40 Steps</span>
+      </div>
+
+      <!-- Current Position Hero Card -->
+      <div class="glass-panel p-3.5 rounded-2xl border border-cyan-500/40 mb-3 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div id="ladderCurrentBadgeHero" class="w-12 h-12 flex items-center justify-center shrink-0"></div>
+          <div>
+            <span class="text-[9px] font-mono text-cyan-400 font-bold uppercase tracking-widest block">YOUR CURRENT RANK</span>
+            <h4 id="ladderCurrentRankTitle" class="text-sm font-black text-white">Rookie 1</h4>
+            <span id="ladderCurrentStepPips" class="text-[10px] font-mono text-slate-400">Step 1 of 5 in Rookie</span>
+          </div>
+        </div>
+        <button onclick="showView('duel')" class="px-3 py-2 bg-gradient-to-r from-cyan-500 to-amber-500 text-black font-black text-xs rounded-xl shadow-md cursor-pointer hover:opacity-90">
+          PLAY DUEL
+        </button>
+      </div>
+
+      <!-- 8 Tiers Container -->
+      <div id="ladderTierList" class="space-y-3 pb-6">
+        <!-- Rendered dynamically by renderLadderUI() -->
+      </div>
+    </div>
+  </main>
+
+  <!-- ========================================================================= -->
+  <!-- 7. CINEMATIC POST-MATCH QUOTE SCREEN (EVERY 3RD ROUND) -->
+  <!-- ========================================================================= -->
+  <div id="quoteModal" class="hidden fixed inset-0 z-50 bg-slate-950/95 backdrop-blur-2xl flex flex-col justify-between items-center p-6 text-center select-none animate-fadeIn">
+    <!-- Top Bar: Saved Heart & Skip Button -->
+    <div class="w-full max-w-lg flex items-center justify-between pt-2">
+      <!-- Heart Favorite Button -->
+      <button id="quoteHeartBtn" onclick="toggleCurrentQuoteFavorite()" class="p-2.5 rounded-full border transition-all cursor-pointer flex items-center gap-1.5 bg-slate-900/80 border-slate-800 text-slate-400 hover:text-white" title="Save Quote">
+        <span id="quoteHeartIcon" class="text-base">🤍</span>
+        <span id="quoteHeartText" class="text-[10px] font-mono font-bold uppercase">Save</span>
+      </button>
+
+      <!-- Skip Button (Reveals after 2 seconds) -->
+      <button id="quoteSkipBtn" onclick="dismissCinematicQuote()" class="hidden px-3.5 py-1.5 rounded-full bg-slate-900/80 hover:bg-slate-800 text-slate-400 hover:text-white text-xs font-mono font-semibold border border-slate-800 items-center gap-1.5 transition-all cursor-pointer">
+        <span>Skip</span>
+        <span>⏩</span>
+      </button>
+    </div>
+
+    <!-- Main Quote Container: Fading in line-by-line -->
+    <div class="my-auto max-w-lg px-4 flex flex-col items-center">
+      <div class="mb-5 flex items-center gap-1.5 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-300 text-[10px] font-mono uppercase tracking-widest">
+        <span>⚡</span>
+        <span id="quoteMoodLabel">Reflection · Round Milestone</span>
+      </div>
+
+      <!-- Quote Lines Container -->
+      <div id="quoteLinesContainer" class="space-y-3 font-serif text-2xl sm:text-3xl md:text-4xl text-slate-100 font-medium leading-relaxed tracking-wide italic">
+        <!-- Rendered dynamically line-by-line -->
+      </div>
+
+      <!-- Author Name Container (Appears Last with Tone.js Deep Note) -->
+      <div id="quoteAuthorContainer" class="mt-8 opacity-0 transform translate-y-4 transition-all duration-1000 ease-out">
+        <div class="h-px w-12 bg-gradient-to-r from-transparent via-cyan-400 to-transparent mx-auto mb-3"></div>
+        <h4 id="quoteAuthorName" class="text-base sm:text-lg font-sans font-bold tracking-widest text-cyan-300 uppercase">
+          — Author Name
+        </h4>
+        <span id="quoteMoodTag" class="text-[10px] font-mono text-slate-500 uppercase tracking-widest mt-1 block">
+          Perseverance
+        </span>
+      </div>
+    </div>
+
+    <!-- Bottom Continue Button -->
+    <div class="w-full max-w-xs pb-4">
+      <button onclick="dismissCinematicQuote()" class="w-full py-3.5 bg-gradient-to-r from-cyan-500 to-purple-600 hover:from-cyan-400 hover:to-purple-500 text-black font-black text-xs tracking-wider uppercase rounded-2xl shadow-[0_0_25px_rgba(6,182,212,0.4)] transition-all cursor-pointer flex items-center justify-center gap-1.5 active:scale-98">
+        <span>Continue</span>
+        <span>→</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- REWARD UNLOCK CELEBRATION MODAL -->
+  <div id="unlockModal" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4">
+    <div id="unlockModalBox" class="w-full max-w-sm glass-panel border-2 border-cyan-400 rounded-3xl p-6 text-center shadow-[0_0_50px_rgba(6,182,212,0.6)] transform scale-90 transition-all duration-300">
+      <div class="w-16 h-16 rounded-2xl bg-cyan-500/20 border border-cyan-400 flex items-center justify-center text-4xl mx-auto mb-3 shadow-[0_0_20px_rgba(6,182,212,0.5)] animate-bounce-short" id="unlockModalIcon">
+        🎁
+      </div>
+      <span class="text-[10px] font-mono text-cyan-400 font-bold uppercase tracking-widest">NEW REWARD UNLOCKED</span>
+      <h3 id="unlockModalTitle" class="text-xl font-black text-white mt-1">Cosmetic Unlocked!</h3>
+      <p id="unlockModalDesc" class="text-xs text-slate-300 mt-2 max-w-xs mx-auto">Added to your Collection.</p>
+
+      <div class="flex gap-2 mt-5">
+        <button onclick="closeUnlockModal()" class="flex-1 py-2.5 bg-cyan-500 hover:bg-cyan-400 text-black font-bold text-xs rounded-xl shadow-lg cursor-pointer">
+          AWESOME!
+        </button>
+        <button onclick="closeUnlockModal(); showView('collection');" class="flex-1 py-2.5 bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs rounded-xl border border-slate-700 cursor-pointer">
+          EQUIP NOW
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- FULLSCREEN TIER RANK-UP CELEBRATION MODAL -->
+  <div id="tierRankUpModal" class="hidden fixed inset-0 z-50 bg-black/95 backdrop-blur-2xl flex flex-col items-center justify-center p-4 text-center select-none animate-fadeIn">
+    <!-- Screen Flash Element -->
+    <div id="tierFlashOverlay" class="fixed inset-0 pointer-events-none bg-white opacity-0 transition-opacity duration-300"></div>
+
+    <div class="w-full max-w-sm glass-panel border-2 border-amber-400 rounded-3xl p-6 shadow-[0_0_50px_rgba(245,158,11,0.5)] transform transition-all duration-300 relative overflow-hidden">
+      <!-- Shiny Light Sweep -->
+      <div class="badge-shine-effect"></div>
+
+      <!-- Large Shiny Tier Badge -->
+      <div id="tierModalBadgeContainer" class="w-24 h-24 mx-auto mb-2 flex items-center justify-center">
+        <!-- SVG injected -->
+      </div>
+
+      <span id="tierModalTag" class="text-[10px] font-mono text-amber-400 font-bold uppercase tracking-widest bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/20">
+        NEW RANK TIER UNLOCKED
+      </span>
+      <h3 id="tierModalTitle" class="text-2xl font-black text-white mt-1">WELCOME TO SPARK!</h3>
+      <p id="tierModalDesc" class="text-xs text-slate-300 mt-1 max-w-xs mx-auto">
+        You entered Tier 2! All bots now battle with Spark tier reflexes.
+      </p>
+
+      <!-- Rewards Unlocked List -->
+      <div class="my-3.5 p-3 bg-slate-900/90 rounded-2xl border border-slate-800 text-left space-y-1.5 text-xs">
+        <span class="text-[9px] font-mono text-slate-400 font-bold uppercase block border-b border-slate-800 pb-1">Rewards Claimed:</span>
+        <div id="tierRewardCoinsItem" class="flex items-center gap-2 text-amber-300 font-bold">
+          <span>🪙</span> <span id="tierRewardCoinsText">+200 Coins Bundle</span>
+        </div>
+        <div id="tierRewardThemeItem" class="flex items-center gap-2 text-cyan-300 font-bold">
+          <span>🎨</span> <span id="tierRewardThemeText">Spark Electro Theme</span>
+        </div>
+        <div id="tierRewardTitleItem" class="flex items-center gap-2 text-purple-300 font-bold">
+          <span>👑</span> <span id="tierRewardTitleText">"Spark Striker" Title</span>
+        </div>
+      </div>
+
+      <div class="flex gap-2">
+        <button onclick="closeTierRankUpModal()" class="flex-1 py-3 bg-gradient-to-r from-amber-500 to-rose-600 hover:from-amber-400 hover:to-rose-500 text-black font-black text-xs uppercase rounded-xl shadow-lg cursor-pointer transition-all active:scale-98">
+          CONTINUE
+        </button>
+        <button onclick="closeTierRankUpModal(); showView('collection');" class="flex-1 py-3 bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs uppercase rounded-xl border border-slate-700 cursor-pointer">
+          EQUIP
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- BOT DUEL LEVEL 10 UNLOCK MODAL -->
+  <div id="duelUnlockModal" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4 text-center animate-fadeIn">
+    <div class="w-full max-w-sm glass-panel border-2 border-cyan-400 rounded-3xl p-6 shadow-[0_0_40px_rgba(6,182,212,0.6)]">
+      <div class="text-5xl mb-2 animate-bounce-short">⚔️</div>
+      <span class="text-[10px] font-mono text-cyan-400 font-bold uppercase tracking-widest">NEW ARENA MODE UNLOCKED</span>
+      <h3 class="text-xl font-black text-white mt-1">Bot Duel (1v1) Opened!</h3>
+      <p class="text-xs text-slate-300 mt-2 leading-relaxed">
+        You reached <strong>Level 10</strong>! Battle through <strong>40 bot ranks</strong> across 8 tiers from Rookie to Mythic in a rapid Speed Math race.
+      </p>
+      <div class="flex gap-2 mt-5">
+        <button onclick="document.getElementById('duelUnlockModal').classList.add('hidden'); showView('duel');" class="flex-1 py-3 bg-cyan-500 hover:bg-cyan-400 text-black font-black text-xs uppercase rounded-xl shadow-lg cursor-pointer">
+          ENTER DUEL NOW
+        </button>
+        <button onclick="document.getElementById('duelUnlockModal').classList.add('hidden')" class="px-4 py-3 bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs uppercase rounded-xl border border-slate-700 cursor-pointer">
+          LATER
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- iOS PWA INSTALL INSTRUCTIONS MODAL -->
+  <div id="iosInstallModal" class="hidden fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="w-full max-w-xs glass-panel border border-slate-800 rounded-3xl p-5 text-center shadow-2xl">
+      <span class="text-3xl">📱</span>
+      <h3 class="text-base font-bold text-white mt-2">Install on iOS Safari</h3>
+      <p class="text-xs text-slate-300 mt-2 text-left leading-relaxed">
+        1. Tap the <strong class="text-cyan-400">Share button</strong> (square with arrow) at bottom of Safari.<br>
+        2. Scroll down and tap <strong class="text-cyan-400">Add to Home Screen</strong>.
+      </p>
+      <button onclick="document.getElementById('iosInstallModal').classList.add('hidden')" class="mt-4 w-full py-2 bg-slate-800 text-white text-xs font-bold rounded-xl cursor-pointer">
+        Close
+      </button>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="w-full border-t border-slate-900/80 py-2.5 px-4 text-center text-[10px] text-slate-500 font-mono">
+    <span>Reflex & Memory Quiz Arena PWA</span>
+    <span class="mx-1.5">·</span>
+    <span>Tone.js Audio Synth</span>
+  </footer>
+
+  <!-- ========================================================================= -->
+  <!-- JAVASCRIPT GAME ENGINE, QUOTES SYSTEM & TONE.JS -->
+  <!-- ========================================================================= -->
+  <script>
+    /* -------------------------------------------------------------------------
+     * 1. STATE & STORAGE
+     * ------------------------------------------------------------------------- */
+    const STORAGE_KEY = 'cyber_arena_pwa_save_v1';
+    const ROUNDS_KEY = 'cyber_arena_rounds_count_v1';
+    const QUOTE_BAG_KEY = 'cyber_arena_quote_bag_v1';
+    const QUOTE_INDEX_KEY = 'cyber_arena_quote_index_v1';
+    const LAST_QUOTE_KEY = 'cyber_arena_last_quote_v1';
+    const SAVED_QUOTES_KEY = 'cyber_arena_saved_quotes_v1';
+
+    const defaultState = {
+      level: 1,
+      xp: 0,
+      coins: 50,
+      streakShield: 0,
+      activeBoosterGames: 0,
+      duelLevel: 1, // Range 1 to 40 (8 tiers * 5 steps)
+      duelUnlockedNotified: false,
+      unlockedRewards: ['theme_cyan', 'sound_synth', 'title_neophyte'],
+      equippedTheme: 'theme_cyan',
+      equippedSound: 'sound_synth',
+      equippedTitle: 'Neophyte',
+      highScores: {
+        reflex: null,
+        memory: 0,
+        math: 0
+      },
+      soundEnabled: true
+    };
+
+    let gameState = { ...defaultState };
+
+    function loadSavedState() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (raw) {
+          gameState = { ...defaultState, ...JSON.parse(raw) };
+        }
+      } catch (e) {
+        gameState = { ...defaultState };
+      }
+      gameState.duelLevel = Math.max(1, Math.min(40, gameState.duelLevel || 1));
+      applyTheme(gameState.equippedTheme);
+      updateHeaderAndHubUI();
+      updateRoundBadge();
+    }
+
+    function saveState() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(gameState));
+      } catch (e) {}
+    }
+
+    function getCompletedRoundsCount() {
+      try {
+        const v = localStorage.getItem(ROUNDS_KEY);
+        return v ? parseInt(v, 10) : 0;
+      } catch (e) {
+        return 0;
+      }
+    }
+
+    function incrementRoundAndCheckQuote(isGoodResult = false) {
+      const nextCount = getCompletedRoundsCount() + 1;
+      localStorage.setItem(ROUNDS_KEY, nextCount.toString());
+      updateRoundBadge();
+
+      // Show quote screen ONLY after every 3rd round (3, 6, 9, 12...)
+      if (nextCount % 3 === 0) {
+        setTimeout(() => {
+          showCinematicQuote(isGoodResult);
+        }, 600);
+      }
+    }
+
+    function updateRoundBadge() {
+      const cnt = getCompletedRoundsCount();
+      const badge = document.getElementById('roundCounterBadge');
+      if (badge) {
+        const untilNext = 3 - (cnt % 3);
+        badge.innerText = untilNext === 3 ? `Quote Ready!` : `Quote in ${untilNext} rnd`;
+        if (untilNext === 3) {
+          badge.className = "text-[10px] font-mono px-2 py-1 rounded-lg bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 animate-pulse";
+        } else {
+          badge.className = "text-[10px] font-mono px-2 py-1 rounded-lg bg-slate-800/80 text-slate-400 border border-slate-700";
+        }
+      }
+    }
+
+    /* -------------------------------------------------------------------------
+     * 2. SHUFFLE-BAG QUOTE SYSTEM (500 QUOTES)
+     * ------------------------------------------------------------------------- */
+    let quoteBag = [];
+    let quotePointer = 0;
+    let lastShownIndex = -1;
+    let activeQuote = null;
+    let quoteMusicSynths = [];
+    let quoteTimerIds = [];
+
+    // Fallback seed quotes in case module load is pending
+    const fallbackQuotes = [
+      { text: "Victory belongs to the most persevering.", author: "Napoleon Bonaparte", mood: "win" },
+      { text: "It does not matter how slowly you go as long as you do not stop.", author: "Confucius", mood: "perseverance" },
+      { text: "We are what we repeatedly do. Excellence is not an act, but a habit.", author: "Aristotle", mood: "focus" },
+      { text: "The impediment to action advances action. What stands in the way becomes the way.", author: "Marcus Aurelius", mood: "perseverance" },
+      { text: "I have not failed. I've just found 10,000 ways that won't work.", author: "Thomas Edison", mood: "perseverance" }
+    ];
+
+    function getQuotesArray() {
+      if (window.ARENA_ALL_QUOTES && Array.isArray(window.ARENA_ALL_QUOTES) && window.ARENA_ALL_QUOTES.length > 0) {
+        return window.ARENA_ALL_QUOTES;
+      }
+      return fallbackQuotes;
+    }
+
+    window.initQuoteShuffleBag = function() {
+      const quotes = getQuotesArray();
+      try {
+        const rawBag = localStorage.getItem(QUOTE_BAG_KEY);
+        const rawPtr = localStorage.getItem(QUOTE_INDEX_KEY);
+        const rawLast = localStorage.getItem(LAST_QUOTE_KEY);
+
+        if (rawBag && rawPtr !== null) {
+          quoteBag = JSON.parse(rawBag);
+          quotePointer = parseInt(rawPtr, 10);
+          lastShownIndex = rawLast !== null ? parseInt(rawLast, 10) : -1;
+        }
+      } catch (e) {
+        quoteBag = [];
+        quotePointer = 0;
+      }
+
+      if (!quoteBag || quoteBag.length !== quotes.length || quotePointer >= quoteBag.length) {
+        createNewQuoteBag(quotes);
+      }
+    };
+
+    function createNewQuoteBag(quotes) {
+      const indices = Array.from({ length: quotes.length }, (_, i) => i);
+      // Fisher-Yates
+      for (let i = indices.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [indices[i], indices[j]] = [indices[j], indices[i]];
+      }
+
+      // Never show the same quote twice across a reshuffle
+      if (indices[0] === lastShownIndex && indices.length > 1) {
+        [indices[0], indices[1]] = [indices[1], indices[0]];
+      }
+
+      quoteBag = indices;
+      quotePointer = 0;
+      saveQuoteBag();
+    }
+
+    function saveQuoteBag() {
+      try {
+        localStorage.setItem(QUOTE_BAG_KEY, JSON.stringify(quoteBag));
+        localStorage.setItem(QUOTE_INDEX_KEY, quotePointer.toString());
+        localStorage.setItem(LAST_QUOTE_KEY, lastShownIndex.toString());
+      } catch (e) {}
+    }
+
+    function getNextQuote(isGoodResult = false) {
+      const quotes = getQuotesArray();
+      if (!quoteBag || quotePointer >= quoteBag.length) {
+        createNewQuoteBag(quotes);
+      }
+
+      const targetMood = isGoodResult ? 'win' : 'perseverance';
+
+      // Mood-aware sliding lookahead (up to 15 quotes ahead)
+      let selectedBagPos = quotePointer;
+      const lookahead = Math.min(quoteBag.length, quotePointer + 15);
+      for (let i = quotePointer; i < lookahead; i++) {
+        const cand = quotes[quoteBag[i]];
+        if (cand && cand.mood === targetMood) {
+          // Swap into current position to preserve bag integrity
+          [quoteBag[quotePointer], quoteBag[i]] = [quoteBag[i], quoteBag[quotePointer]];
+          selectedBagPos = quotePointer;
+          break;
+        }
+      }
+
+      const quoteIdx = quoteBag[selectedBagPos];
+      lastShownIndex = quoteIdx;
+      quotePointer++;
+      saveQuoteBag();
+
+      return quotes[quoteIdx] || quotes[0];
+    }
+
+    function getSavedQuotes() {
+      try {
+        const raw = localStorage.getItem(SAVED_QUOTES_KEY);
+        return raw ? JSON.parse(raw) : [];
+      } catch (e) {
+        return [];
+      }
+    }
+
+    function toggleSaveQuote(q) {
+      let list = getSavedQuotes();
+      const idx = list.findIndex(item => item.text === q.text);
+      let nowSaved = false;
+      if (idx >= 0) {
+        list.splice(idx, 1);
+        nowSaved = false;
+      } else {
+        list.unshift(q);
+        nowSaved = true;
+      }
+      localStorage.setItem(SAVED_QUOTES_KEY, JSON.stringify(list));
+      return nowSaved;
+    }
+
+    function isQuoteFavorited(text) {
+      const list = getSavedQuotes();
+      return list.some(item => item.text === text);
+    }
+
+    /* -------------------------------------------------------------------------
+     * 3. CINEMATIC QUOTE SCREEN & TONE.JS MUSIC (6-8s)
+     * ------------------------------------------------------------------------- */
+    async function playCinematicThemeMusic(onAuthorAppears) {
+      if (!gameState.soundEnabled || !window.Tone) return;
+      stopCinematicThemeMusic();
+
+      try {
+        await Tone.start();
+        const now = Tone.now();
+
+        const masterGain = new Tone.Gain(0.7).toDestination();
+        quoteMusicSynths.push(masterGain);
+
+        // 1. Soft Warm Synth Pad Chord (D3, A3, F#4, C#5)
+        const padSynth = new Tone.PolySynth(Tone.Synth, {
+          oscillator: { type: 'sine' },
+          envelope: { attack: 1.4, decay: 3.5, sustain: 0.3, release: 2.0 }
+        }).connect(masterGain);
+        padSynth.volume.value = -12;
+        quoteMusicSynths.push(padSynth);
+        padSynth.triggerAttackRelease(['D3', 'A3', 'F#4', 'C#5'], '5s', now);
+
+        // 2. Slow Rising Arpeggio (D4, F#4, A4, C#5, E5, F#5)
+        const arpSynth = new Tone.PolySynth(Tone.Synth, {
+          oscillator: { type: 'triangle' },
+          envelope: { attack: 0.08, decay: 1.2, sustain: 0.05, release: 1.0 }
+        }).connect(masterGain);
+        arpSynth.volume.value = -14;
+        quoteMusicSynths.push(arpSynth);
+
+        const arpNotes = ['D4', 'F#4', 'A4', 'C#5', 'E5', 'F#5'];
+        arpNotes.forEach((note, i) => {
+          arpSynth.triggerAttackRelease(note, '8n', now + 1.2 + i * 0.55);
+        });
+
+        // 3. Deep Low Bass Note (D2) on author appearance (~4.0s)
+        const bassSynth = new Tone.Synth({
+          oscillator: { type: 'sine' },
+          envelope: { attack: 0.3, decay: 2.5, sustain: 0.2, release: 1.8 }
+        }).connect(masterGain);
+        bassSynth.volume.value = -8;
+        quoteMusicSynths.push(bassSynth);
+        bassSynth.triggerAttackRelease('D2', '3s', now + 4.0);
+
+        const tid = setTimeout(() => {
+          if (onAuthorAppears) onAuthorAppears();
+        }, 4000);
+        quoteTimerIds.push(tid);
+
+      } catch (e) {}
+    }
+
+    function stopCinematicThemeMusic() {
+      quoteTimerIds.forEach(t => clearTimeout(t));
+      quoteTimerIds = [];
+
+      try {
+        quoteMusicSynths.forEach(s => {
+          if (s && s.volume && s.volume.rampTo) {
+            try { s.volume.rampTo(-60, 0.35); } catch (e) {}
+          }
+          setTimeout(() => {
+            try { s.dispose(); } catch (e) {}
+          }, 380);
+        });
+        quoteMusicSynths = [];
+      } catch (e) {}
+    }
+
+    function showCinematicQuote(isGoodResult = false) {
+      activeQuote = getNextQuote(isGoodResult);
+      if (!activeQuote) return;
+
+      const modal = document.getElementById('quoteModal');
+      const skipBtn = document.getElementById('quoteSkipBtn');
+      const authorBox = document.getElementById('quoteAuthorContainer');
+      const linesContainer = document.getElementById('quoteLinesContainer');
+
+      // Reset state
+      skipBtn.classList.add('hidden');
+      skipBtn.classList.remove('flex');
+      authorBox.className = "mt-8 opacity-0 transform translate-y-4 transition-all duration-1000 ease-out";
+      linesContainer.innerHTML = '';
+
+      // Update author & mood
+      document.getElementById('quoteAuthorName').innerText = `— ${activeQuote.author}`;
+      document.getElementById('quoteMoodTag').innerText = activeQuote.mood;
+      document.getElementById('quoteMoodLabel').innerText = `${activeQuote.mood.toUpperCase()} · ROUND REFLECTION`;
+
+      // Update Heart favorite button
+      updateQuoteHeartButton();
+
+      // Split quote into staggered lines
+      const words = activeQuote.text.split(' ');
+      const lineCount = words.length > 10 ? 3 : words.length > 5 ? 2 : 1;
+      const wordsPerLine = Math.ceil(words.length / lineCount);
+      const lines = [];
+      for (let i = 0; i < words.length; i += wordsPerLine) {
+        lines.push(words.slice(i, i + wordsPerLine).join(' '));
+      }
+
+      // Add quote lines with staggered CSS animation
+      lines.forEach((lineText, idx) => {
+        const p = document.createElement('p');
+        p.className = 'animate-quote-line';
+        p.style.animationDelay = `${idx * 0.45}s`;
+        p.innerText = lineText;
+        linesContainer.appendChild(p);
+      });
+
+      // Show modal
+      modal.classList.remove('hidden');
+
+      // Start 6-8s Tone.js theme music
+      playCinematicThemeMusic(() => {
+        revealAuthor();
+      });
+
+      // Skip button appears after 2 seconds
+      const skipTid = setTimeout(() => {
+        skipBtn.classList.remove('hidden');
+        skipBtn.classList.add('flex');
+      }, 2000);
+      quoteTimerIds.push(skipTid);
+
+      // Backup reveal author at 3.8s
+      const authorTid = setTimeout(() => {
+        revealAuthor();
+      }, 3800);
+      quoteTimerIds.push(authorTid);
+    }
+
+    function revealAuthor() {
+      const authorBox = document.getElementById('quoteAuthorContainer');
+      if (authorBox) {
+        authorBox.className = "mt-8 opacity-100 transform translate-y-0 transition-all duration-1000 ease-out";
+      }
+    }
+
+    function dismissCinematicQuote() {
+      stopCinematicThemeMusic();
+      const modal = document.getElementById('quoteModal');
+      modal.classList.add('hidden');
+    }
+
+    function updateQuoteHeartButton() {
+      if (!activeQuote) return;
+      const isFav = isQuoteFavorited(activeQuote.text);
+      const heartIcon = document.getElementById('quoteHeartIcon');
+      const heartText = document.getElementById('quoteHeartText');
+      const btn = document.getElementById('quoteHeartBtn');
+
+      if (isFav) {
+        heartIcon.innerText = '❤️';
+        heartText.innerText = 'Saved';
+        btn.className = "p-2.5 rounded-full border transition-all cursor-pointer flex items-center gap-1.5 bg-rose-500/20 border-rose-500/50 text-rose-400 shadow-[0_0_15px_rgba(244,63,94,0.4)]";
+      } else {
+        heartIcon.innerText = '🤍';
+        heartText.innerText = 'Save';
+        btn.className = "p-2.5 rounded-full border transition-all cursor-pointer flex items-center gap-1.5 bg-slate-900/80 border-slate-800 text-slate-400 hover:text-white";
+      }
+    }
+
+    function toggleCurrentQuoteFavorite() {
+      if (!activeQuote) return;
+      toggleSaveQuote(activeQuote);
+      updateQuoteHeartButton();
+      soundEngine.playTap();
+      triggerHaptic(20);
+    }
+
+    /* -------------------------------------------------------------------------
+     * 4. XP & INFINITE LEVEL FORMULA:
+     * - Level 1: 50 XP initially
+     * - Levels 2 - 9: 10 XP each to advance
+     * - Levels 10 - 19: 20 XP each to advance
+     * - Levels 20 - 29: 30 XP each to advance
+     * - Levels 30 - 39: 40 XP each to advance
+     * - And so on (+10 XP per decade tier: Math.floor(lvl / 10) * 10 + 10)
+     * ------------------------------------------------------------------------- */
+    function getXpRequired(lvl) {
+      if (lvl <= 1) {
+        return 50; // Initial requirement for Level 1 -> Level 2
+      }
+      const decade = Math.floor(lvl / 10);
+      return Math.max(10, decade * 10 + 10);
+    }
+
+    function addXpAndCoins(earnedXp, earnedCoins) {
+      if (gameState.activeBoosterGames > 0) {
+        earnedXp = Math.round(earnedXp * 1.5);
+        earnedCoins = Math.round(earnedCoins * 1.5);
+        gameState.activeBoosterGames = Math.max(0, gameState.activeBoosterGames - 1);
+      }
+
+      gameState.coins += earnedCoins;
+      gameState.xp += earnedXp;
+
+      let leveledUp = false;
+      let nextTarget = getXpRequired(gameState.level);
+
+      while (gameState.xp >= nextTarget) {
+        gameState.xp -= nextTarget;
+        gameState.level += 1;
+        leveledUp = true;
+        nextTarget = getXpRequired(gameState.level);
+        onLevelUp(gameState.level);
+      }
+
+      saveState();
+      updateHeaderAndHubUI();
+      return { leveledUp, earnedXp, earnedCoins };
+    }
+
+    /* -------------------------------------------------------------------------
+     * 5. REWARD TRACK FORMULA & MILESTONES
+     * ------------------------------------------------------------------------- */
+    const THEMES = [
+      { id: 'theme_cyan', name: 'Cyber Cyan', icon: '💎', class: '' },
+      { id: 'theme_matrix', name: 'Neon Matrix', icon: '🟢', class: 'theme-matrix' },
+      { id: 'theme_crimson', name: 'Crimson Rose', icon: '🔴', class: 'theme-crimson' },
+      { id: 'theme_amethyst', name: 'Void Amethyst', icon: '🟣', class: 'theme-amethyst' },
+      { id: 'theme_gold', name: 'Solar Gold', icon: '🟡', class: 'theme-gold' },
+      // Bot Duel Tier Themes
+      { id: 'theme_spark', name: 'Spark Electro', icon: '⚡', class: 'theme-spark' },
+      { id: 'theme_circuit', name: 'Circuit Grid', icon: '💠', class: 'theme-circuit' },
+      { id: 'theme_volt', name: 'Volt Cobalt', icon: '🔷', class: 'theme-volt' },
+      { id: 'theme_surge', name: 'Surge Violet', icon: '🔮', class: 'theme-surge' },
+      { id: 'theme_phantom', name: 'Phantom Magenta', icon: '🌸', class: 'theme-phantom' },
+      { id: 'theme_apex', name: 'Apex Solar', icon: '🔶', class: 'theme-apex' },
+      { id: 'theme_mythic', name: 'Mythic Prismatic', icon: '✨', class: 'theme-mythic' }
+    ];
+
+    const SOUND_PACKS = [
+      { id: 'sound_synth', name: 'Cyber Synth', icon: '🎹' },
+      { id: 'sound_8bit', name: '8-Bit Chiptune', icon: '👾' },
+      { id: 'sound_pluck', name: 'FM Pluck', icon: '🪕' },
+      { id: 'sound_glass', name: 'Ambient Glass', icon: '🔮' },
+      // Bot Duel Tier Sound Packs
+      { id: 'sound_spark', name: 'Spark Pulse', icon: '⚡' },
+      { id: 'sound_volt', name: 'Volt Electric', icon: '🔋' },
+      { id: 'sound_phantom', name: 'Phantom Echo', icon: '👻' },
+      { id: 'sound_mythic', name: 'Celestial Mythic', icon: '🌟' }
+    ];
+
+    const TITLES = [
+      'Neophyte',
+      'Lightning Reflex',
+      'Memory Master',
+      'Neural Overclocker',
+      'Quantum Synapse',
+      'Apex Synchronizer',
+      'Cyber Grandmaster',
+      // Bot Duel Tier Titles
+      'Rookie Duelist',
+      'Spark Striker',
+      'Circuit Racer',
+      'Volt Champion',
+      'Surge Overlord',
+      'Phantom Assassin',
+      'Apex Predator',
+      'Mythic Grandmaster'
+    ];
+
+    function getRewardForLevel(lvl) {
+      const tierIndex = Math.floor(lvl / 50);
+      const tiers = ['Bronze', 'Silver', 'Gold', 'Neon', 'Mythic'];
+      const tierPrefix = tiers[Math.min(tierIndex, tiers.length - 1)];
+
+      if (lvl % 25 === 0) {
+        return {
+          type: 'special',
+          id: `mode_hyper_${lvl}`,
+          name: `${tierPrefix} Hyper Velocity`,
+          icon: '⚡',
+          desc: 'Special high-octane 2x score mode unlocked!'
+        };
+      } else if (lvl % 10 === 0) {
+        const titleIdx = ((lvl / 10) - 1) % TITLES.length;
+        const titleName = TITLES[titleIdx];
+        return {
+          type: 'title',
+          id: `title_${titleName.toLowerCase().replace(/\s+/g, '_')}`,
+          name: `${tierPrefix} ${titleName}`,
+          icon: '👑',
+          desc: `Equip the "${titleName}" prestige title!`
+        };
+      } else if (lvl % 5 === 0) {
+        const themeIdx = ((lvl / 5)) % THEMES.length;
+        const t = THEMES[themeIdx];
+        return {
+          type: 'theme',
+          id: t.id,
+          name: `${tierPrefix} ${t.name}`,
+          icon: t.icon,
+          desc: `Unlock the ${t.name} interface theme!`
+        };
+      } else {
+        return {
+          type: 'cache',
+          id: `cache_${lvl}`,
+          name: `${lvl * 25} Coins & Cache`,
+          icon: '🪙',
+          desc: `Bonus ${lvl * 25} coins deposited!`
+        };
+      }
+    }
+
+    function onLevelUp(newLevel) {
+      soundEngine.playLevelUp();
+      const reward = getRewardForLevel(newLevel);
+
+      if (reward.type === 'cache') {
+        gameState.coins += newLevel * 25;
+      } else {
+        if (!gameState.unlockedRewards.includes(reward.id)) {
+          gameState.unlockedRewards.push(reward.id);
+        }
+      }
+
+      triggerRewardUnlockCelebration(reward);
+
+      // Check for Level 10 Bot Duel (1v1) Unlock
+      if (newLevel >= 10 && !gameState.duelUnlockedNotified) {
+        gameState.duelUnlockedNotified = true;
+        saveState();
+        setTimeout(() => {
+          soundEngine.playTierGrandFanfare();
+          triggerHaptic([100, 100, 200]);
+          const dModal = document.getElementById('duelUnlockModal');
+          if (dModal) dModal.classList.remove('hidden');
+        }, 1400);
+      }
+    }
+
+    function triggerRewardUnlockCelebration(reward) {
+      soundEngine.playUnlock();
+      triggerHaptic([50, 100, 150]);
+
+      document.getElementById('unlockModalIcon').innerText = reward.icon;
+      document.getElementById('unlockModalTitle').innerText = reward.name;
+      document.getElementById('unlockModalDesc').innerText = reward.desc;
+
+      const modal = document.getElementById('unlockModal');
+      modal.classList.remove('hidden');
+    }
+
+    function closeUnlockModal() {
+      document.getElementById('unlockModal').classList.add('hidden');
+      updateHeaderAndHubUI();
+    }
+
+    /* -------------------------------------------------------------------------
+     * 6. TONE.JS SOUND ENGINE (SFX)
+     * ------------------------------------------------------------------------- */
+    class CyberSoundEngine {
+      constructor() {
+        this.synth = null;
+        this.fmsynth = null;
+        this.inited = false;
+      }
+
+      async ensureContext() {
+        if (!gameState.soundEnabled) return;
+        if (!this.inited && window.Tone) {
+          try {
+            await Tone.start();
+            this.synth = new Tone.PolySynth(Tone.Synth, {
+              oscillator: { type: 'triangle' },
+              envelope: { attack: 0.005, decay: 0.12, sustain: 0, release: 0.1 }
+            }).toDestination();
+            this.synth.volume.value = -8;
+
+            this.fmsynth = new Tone.PolySynth(Tone.FMSynth).toDestination();
+            this.fmsynth.volume.value = -10;
+
+            this.inited = true;
+          } catch (e) {}
+        }
+      }
+
+      playTap() {
+        if (!gameState.soundEnabled) return;
+        this.ensureContext().then(() => {
+          if (!this.synth) return;
+          const now = Tone.now();
+          if (gameState.equippedSound === 'sound_8bit') {
+            this.synth.triggerAttackRelease('A5', '32n', now);
+          } else {
+            this.synth.triggerAttackRelease('C6', '64n', now);
+          }
+        });
+      }
+
+      playSimonNote(idx) {
+        if (!gameState.soundEnabled) return;
+        this.ensureContext().then(() => {
+          if (!this.synth) return;
+          const notes = ['C4', 'E4', 'G4', 'C5'];
+          const note = notes[idx % notes.length];
+          const now = Tone.now();
+          this.synth.triggerAttackRelease(note, '8n', now);
+        });
+      }
+
+      playCorrect() {
+        if (!gameState.soundEnabled) return;
+        this.ensureContext().then(() => {
+          if (!this.synth) return;
+          const now = Tone.now();
+          this.synth.triggerAttackRelease('E5', '16n', now);
+          this.synth.triggerAttackRelease('A5', '16n', now + 0.08);
+        });
+      }
+
+      playWrong() {
+        if (!gameState.soundEnabled) return;
+        this.ensureContext().then(() => {
+          if (!this.synth) return;
+          const now = Tone.now();
+          this.synth.triggerAttackRelease(['F2', 'C2'], '8n', now);
+        });
+      }
+
+      playLevelUp() {
+        if (!gameState.soundEnabled) return;
+        this.ensureContext().then(() => {
+          if (!this.synth) return;
+          const now = Tone.now();
+          const chord = ['C4', 'E4', 'G4', 'C5', 'E5', 'G5'];
+          chord.forEach((n, i) => {
+            this.synth.triggerAttackRelease(n, '16n', now + i * 0.06);
+          });
+        });
+      }
+
+      playUnlock() {
+        if (!gameState.soundEnabled) return;
+        this.ensureContext().then(() => {
+          if (!this.fmsynth) return;
+          const now = Tone.now();
+          const notes = ['D4', 'G4', 'A4', 'D5', 'G5'];
+          notes.forEach((n, i) => {
+            this.fmsynth.triggerAttackRelease(n, '12n', now + i * 0.08);
+          });
+        });
+      }
+
+      playShieldAbsorb() {
+        if (!gameState.soundEnabled) return;
+        this.ensureContext().then(() => {
+          if (!this.synth) return;
+          const now = Tone.now();
+          this.synth.triggerAttackRelease(['G5', 'D6'], '4n', now);
+        });
+      }
+
+      playTick() {
+        if (!gameState.soundEnabled) return;
+        this.ensureContext().then(() => {
+          if (!this.synth) return;
+          this.synth.triggerAttackRelease('A5', '64n', Tone.now());
+        });
+      }
+
+      playGo() {
+        if (!gameState.soundEnabled) return;
+        this.ensureContext().then(() => {
+          if (!this.fmsynth) return;
+          const now = Tone.now();
+          this.fmsynth.triggerAttackRelease('C5', '16n', now);
+          this.fmsynth.triggerAttackRelease('G5', '8n', now + 0.08);
+          this.fmsynth.triggerAttackRelease('C6', '4n', now + 0.16);
+        });
+      }
+
+      playLockout() {
+        if (!gameState.soundEnabled) return;
+        this.ensureContext().then(() => {
+          if (!this.synth) return;
+          this.synth.triggerAttackRelease(['Eb2', 'Bb1'], '8n', Tone.now());
+        });
+      }
+
+      playRankUpSparkle() {
+        if (!gameState.soundEnabled) return;
+        this.ensureContext().then(() => {
+          if (!this.synth) return;
+          const now = Tone.now();
+          const notes = ['G4', 'B4', 'D5', 'G5', 'B5', 'D6'];
+          notes.forEach((n, i) => {
+            this.synth.triggerAttackRelease(n, '32n', now + i * 0.04);
+          });
+        });
+      }
+
+      playTierGrandFanfare() {
+        if (!gameState.soundEnabled) return;
+        this.ensureContext().then(() => {
+          if (!this.fmsynth) return;
+          const now = Tone.now();
+          const chord1 = ['D4', 'F#4', 'A4', 'D5'];
+          const chord2 = ['G4', 'B4', 'D5', 'G5'];
+          const chord3 = ['A4', 'C#5', 'E5', 'A5'];
+          chord1.forEach(n => this.fmsynth.triggerAttackRelease(n, '16n', now));
+          chord2.forEach(n => this.fmsynth.triggerAttackRelease(n, '16n', now + 0.18));
+          chord3.forEach(n => this.fmsynth.triggerAttackRelease(n, '4n', now + 0.36));
+        });
+      }
+
+      playGameOver() {
+        if (!gameState.soundEnabled) return;
+        this.ensureContext().then(() => {
+          if (!this.synth) return;
+          const now = Tone.now();
+          this.synth.triggerAttackRelease(['C3', 'Eb3'], '8n', now);
+          this.synth.triggerAttackRelease(['Bb2', 'D3'], '4n', now + 0.2);
+        });
+      }
+    }
+
+    const soundEngine = new CyberSoundEngine();
+
+    function triggerHaptic(pattern = 25) {
+      if (navigator.vibrate) {
+        try { navigator.vibrate(pattern); } catch (e) {}
+      }
+    }
+
+    function toggleSound() {
+      gameState.soundEnabled = !gameState.soundEnabled;
+      document.getElementById('soundIcon').innerText = gameState.soundEnabled ? '🔊' : '🔇';
+      saveState();
+      soundEngine.playTap();
+    }
+
+    /* -------------------------------------------------------------------------
+     * 7. VIEW CONTROLLER
+     * ------------------------------------------------------------------------- */
+    function showView(viewId) {
+      soundEngine.playTap();
+      triggerHaptic(15);
+
+      const views = ['homeView', 'reflexView', 'memoryView', 'mathView', 'duelView', 'ladderView', 'collectionView', 'shopView'];
+      views.forEach(v => {
+        const el = document.getElementById(v);
+        if (el) el.classList.add('hidden');
+      });
+
+      clearTimeout(reflexTimer);
+      clearInterval(mathInterval);
+      if (typeof clearDuelTimers === 'function') clearDuelTimers();
+
+      const target = document.getElementById(`${viewId}View`);
+      if (target) target.classList.remove('hidden');
+
+      if (viewId === 'home') updateHeaderAndHubUI();
+      if (viewId === 'duel') renderDuelUI();
+      if (viewId === 'ladder') renderLadderUI();
+      if (viewId === 'collection') renderCollectionUI();
+      if (viewId === 'shop') renderShopUI();
+    }
+
+    function switchCollectionTab(tab) {
+      soundEngine.playTap();
+      const cosmSec = document.getElementById('collCosmeticsSection');
+      const quoteSec = document.getElementById('collQuotesSection');
+      const cosmBtn = document.getElementById('tabCosmeticsBtn');
+      const quoteBtn = document.getElementById('tabQuotesBtn');
+
+      if (tab === 'cosmetics') {
+        cosmSec.classList.remove('hidden');
+        quoteSec.classList.add('hidden');
+        cosmBtn.className = "flex-1 py-1.5 rounded-lg text-xs font-bold transition-all bg-cyan-500/20 text-cyan-300 border border-cyan-500/30";
+        quoteBtn.className = "flex-1 py-1.5 rounded-lg text-xs font-bold transition-all text-slate-400 hover:text-white";
+      } else {
+        cosmSec.classList.add('hidden');
+        quoteSec.classList.remove('hidden');
+        cosmBtn.className = "flex-1 py-1.5 rounded-lg text-xs font-bold transition-all text-slate-400 hover:text-white";
+        quoteBtn.className = "flex-1 py-1.5 rounded-lg text-xs font-bold transition-all bg-rose-500/20 text-rose-300 border border-rose-500/30";
+        renderSavedQuotesList();
+      }
+    }
+
+    function renderSavedQuotesList() {
+      const list = getSavedQuotes();
+      document.getElementById('savedQuotesCount').innerText = list.length;
+      const container = document.getElementById('savedQuotesList');
+      container.innerHTML = '';
+
+      if (list.length === 0) {
+        container.innerHTML = `
+          <div class="p-6 text-center glass-panel rounded-2xl border border-slate-800">
+            <span class="text-3xl block mb-2">🤍</span>
+            <h4 class="text-xs font-bold text-slate-300">No Saved Quotes Yet</h4>
+            <p class="text-[10px] text-slate-400 mt-1">Tap the heart button on post-match reflection screens to save your favorite quotes!</p>
+          </div>
+        `;
+        return;
+      }
+
+      list.forEach(q => {
+        const card = document.createElement('div');
+        card.className = "glass-panel p-3.5 rounded-2xl border border-slate-800 relative";
+        card.innerHTML = `
+          <div class="flex items-start justify-between gap-2">
+            <span class="text-[9px] font-mono font-bold text-cyan-400 uppercase tracking-widest bg-cyan-500/10 px-1.5 py-0.5 rounded border border-cyan-500/20">${q.mood}</span>
+            <button class="remove-fav-btn text-rose-400 hover:text-rose-300 text-xs p-1" title="Remove">✕</button>
+          </div>
+          <p class="font-serif italic text-xs sm:text-sm text-slate-100 mt-2 leading-relaxed">“${q.text}”</p>
+          <span class="text-[10px] font-bold text-cyan-300 block mt-2 tracking-wider">— ${q.author}</span>
+        `;
+        card.querySelector('.remove-fav-btn').onclick = () => {
+          toggleSaveQuote(q);
+          renderSavedQuotesList();
+          soundEngine.playTap();
+        };
+        container.appendChild(card);
+      });
+    }
+
+    /* -------------------------------------------------------------------------
+     * 8. UI UPDATES (REWARD TRACK STRIP & HEADER)
+     * ------------------------------------------------------------------------- */
+    function updateHeaderAndHubUI() {
+      document.getElementById('headerLevel').innerText = gameState.level;
+      document.getElementById('headerCoins').innerText = gameState.coins;
+      document.getElementById('playerTitleBadge').innerText = gameState.equippedTitle;
+      document.getElementById('shieldCount').innerText = gameState.streakShield;
+
+      const shieldBtn = document.getElementById('streakShieldBtn');
+      if (gameState.streakShield > 0) {
+        shieldBtn.className = "p-1.5 rounded-lg border text-xs flex items-center gap-1 transition-all bg-amber-500/20 border-amber-500/50 text-amber-300 shadow-[0_0_10px_rgba(245,158,11,0.4)]";
+      } else {
+        shieldBtn.className = "p-1.5 rounded-lg border text-xs flex items-center gap-1 transition-all bg-slate-900/80 border-slate-800 text-slate-500";
+      }
+
+      const targetXp = getXpRequired(gameState.level);
+      document.getElementById('hubLevelDisplay').innerText = gameState.level;
+      document.getElementById('hubXpCurrent').innerText = gameState.xp;
+      document.getElementById('hubXpTarget').innerText = targetXp;
+      const pct = Math.min(100, Math.round((gameState.xp / targetXp) * 100));
+      document.getElementById('hubLevelXpBar').style.width = `${pct}%`;
+
+      document.getElementById('homeBestReflex').innerText = gameState.highScores.reflex ? `Best: ${gameState.highScores.reflex} ms` : 'Best: -- ms';
+      document.getElementById('homeBestMemory').innerText = `Best: Lvl ${gameState.highScores.memory}`;
+      document.getElementById('homeBestMath').innerText = `Best: ${gameState.highScores.math} Pts`;
+
+      const nextMilestone = Math.ceil((gameState.level + 0.1) / 5) * 5;
+      const prevMilestone = Math.max(1, nextMilestone - 5);
+      const lockedMilestone1 = nextMilestone + 5;
+
+      const nextReward = getRewardForLevel(nextMilestone);
+      const prevReward = getRewardForLevel(prevMilestone);
+
+      document.getElementById('prevRewardIcon').innerText = prevReward.icon;
+      document.getElementById('prevRewardName').innerText = prevReward.name;
+      document.getElementById('prevRewardLvl').innerText = `Lvl ${prevMilestone}`;
+
+      document.getElementById('nextRewardIcon').innerText = nextReward.icon;
+      document.getElementById('nextRewardName').innerText = nextReward.name;
+      document.getElementById('nextRewardTier').innerText = `${nextReward.type.toUpperCase()} · Lvl ${nextMilestone}`;
+
+      const lvlsDone = gameState.level - prevMilestone;
+      const lvlsTotal = nextMilestone - prevMilestone;
+      const trackPct = Math.min(100, Math.max(10, Math.round((lvlsDone / lvlsTotal) * 100)));
+      document.getElementById('rewardProgressBar').style.width = `${trackPct}%`;
+      document.getElementById('rewardProgressText').innerText = `Level ${gameState.level} / ${nextMilestone}`;
+      document.getElementById('rewardNextDistance').innerText = `Lvl ${nextMilestone} in ${nextMilestone - gameState.level} lvls`;
+
+      document.getElementById('locked1Lvl').innerText = `Lvl ${lockedMilestone1}`;
+
+      // Update player rank badge in header
+      if (typeof getRankInfo === 'function' && typeof renderRankBadgeSvg === 'function') {
+        const pRank = getRankInfo(gameState.duelLevel);
+        const hBadgeEl = document.getElementById('headerRankBadgeIcon');
+        if (hBadgeEl) hBadgeEl.innerHTML = renderRankBadgeSvg(pRank.tierIndex, pRank.step, 16, false);
+        const hNameEl = document.getElementById('headerRankName');
+        if (hNameEl) hNameEl.innerText = pRank.rankName;
+
+        // Update Bot Duel card on Home screen
+        const botDuelIconContainer = document.getElementById('botDuelIconContainer');
+        const botDuelStatus = document.getElementById('homeBotDuelStatus');
+        const botDuelLockBadge = document.getElementById('botDuelLockBadge');
+        const lockProgContainer = document.getElementById('botDuelLockProgressContainer');
+
+        if (gameState.level >= 10) {
+          if (lockProgContainer) lockProgContainer.classList.add('hidden');
+          if (botDuelIconContainer) {
+            botDuelIconContainer.innerHTML = '⚔️';
+            botDuelIconContainer.className = "w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 text-2xl group-hover:bg-amber-500 group-hover:text-black transition-all shrink-0";
+          }
+          if (botDuelStatus) botDuelStatus.innerText = pRank.rankName;
+          if (botDuelLockBadge) {
+            botDuelLockBadge.innerText = `Rank ${gameState.duelLevel} / 40`;
+            botDuelLockBadge.className = "text-[9px] font-mono px-1.5 py-0.2 rounded bg-amber-500/10 text-amber-300 border border-amber-500/30";
+          }
+        } else {
+          if (lockProgContainer) lockProgContainer.classList.remove('hidden');
+          if (botDuelIconContainer) {
+            botDuelIconContainer.innerHTML = '🔒';
+            botDuelIconContainer.className = "w-12 h-12 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-500 text-2xl shrink-0";
+          }
+          if (botDuelStatus) botDuelStatus.innerText = "Locked";
+          if (botDuelLockBadge) {
+            botDuelLockBadge.innerText = "Lvl 10 Required";
+            botDuelLockBadge.className = "text-[9px] font-mono px-1.5 py-0.2 rounded bg-slate-800 text-slate-400 border border-slate-700";
+          }
+          const progTxt = document.getElementById('botDuelUnlockProgressText');
+          if (progTxt) progTxt.innerText = `Lvl ${gameState.level} / 10`;
+          const progBar = document.getElementById('botDuelUnlockProgressBar');
+          if (progBar) progBar.style.width = `${Math.min(100, Math.round((gameState.level / 10) * 100))}%`;
+        }
+      }
+
+      // Update saved quotes count
+      const sq = getSavedQuotes();
+      document.getElementById('savedQuotesCount').innerText = sq.length;
+    }
+
+    function applyTheme(themeId) {
+      document.body.className = "h-full flex flex-col justify-between antialiased selection:bg-cyan-500 selection:text-black font-sans bg-slate-950 text-slate-100 overflow-x-hidden";
+      const theme = THEMES.find(t => t.id === themeId);
+      if (theme && theme.class) {
+        document.body.classList.add(theme.class);
+      }
+    }
+
+    function renderCollectionUI() {
+      document.getElementById('collCoinsDisplay').innerText = gameState.coins;
+      const sq = getSavedQuotes();
+      document.getElementById('savedQuotesCount').innerText = sq.length;
+
+      const themeContainer = document.getElementById('themeList');
+      themeContainer.innerHTML = '';
+      THEMES.forEach(th => {
+        const isUnlocked = gameState.unlockedRewards.includes(th.id);
+        const isEquipped = gameState.equippedTheme === th.id;
+        const btn = document.createElement('button');
+        btn.className = `p-3 rounded-2xl border text-left flex items-center justify-between cursor-pointer transition-all ${
+          isEquipped
+            ? 'bg-cyan-500/20 border-cyan-400 text-white'
+            : isUnlocked
+            ? 'bg-slate-900 border-slate-800 text-slate-300 hover:border-slate-700'
+            : 'bg-slate-950/40 border-slate-900 text-slate-600 opacity-60 cursor-not-allowed'
+        }`;
+        btn.innerHTML = `
+          <div class="flex items-center gap-2">
+            <span class="text-xl">${th.icon}</span>
+            <span class="text-xs font-bold">${th.name}</span>
+          </div>
+          <span class="text-[10px] font-mono">${isEquipped ? 'EQUIPPED' : isUnlocked ? 'EQUIP' : '🔒'}</span>
+        `;
+        if (isUnlocked) {
+          btn.onclick = () => {
+            gameState.equippedTheme = th.id;
+            applyTheme(th.id);
+            saveState();
+            renderCollectionUI();
+            soundEngine.playTap();
+          };
+        }
+        themeContainer.appendChild(btn);
+      });
+
+      const soundContainer = document.getElementById('soundPackList');
+      soundContainer.innerHTML = '';
+      SOUND_PACKS.forEach(sp => {
+        const isUnlocked = gameState.unlockedRewards.includes(sp.id);
+        const isEquipped = gameState.equippedSound === sp.id;
+        const btn = document.createElement('button');
+        btn.className = `p-3 rounded-2xl border text-left flex items-center justify-between cursor-pointer transition-all ${
+          isEquipped
+            ? 'bg-purple-500/20 border-purple-400 text-white'
+            : isUnlocked
+            ? 'bg-slate-900 border-slate-800 text-slate-300'
+            : 'bg-slate-950/40 border-slate-900 text-slate-600 opacity-60 cursor-not-allowed'
+        }`;
+        btn.innerHTML = `
+          <div class="flex items-center gap-2">
+            <span class="text-xl">${sp.icon}</span>
+            <span class="text-xs font-bold">${sp.name}</span>
+          </div>
+          <span class="text-[10px] font-mono">${isEquipped ? 'EQUIPPED' : isUnlocked ? 'EQUIP' : '🔒'}</span>
+        `;
+        if (isUnlocked) {
+          btn.onclick = () => {
+            gameState.equippedSound = sp.id;
+            saveState();
+            renderCollectionUI();
+            soundEngine.playTap();
+          };
+        }
+        soundContainer.appendChild(btn);
+      });
+
+      const titleContainer = document.getElementById('titleList');
+      titleContainer.innerHTML = '';
+      TITLES.forEach(tName => {
+        const id = `title_${tName.toLowerCase().replace(/\s+/g, '_')}`;
+        const isUnlocked = tName === 'Neophyte' || gameState.unlockedRewards.some(r => r.includes(id));
+        const isEquipped = gameState.equippedTitle === tName;
+        const btn = document.createElement('button');
+        btn.className = `px-3 py-1.5 rounded-xl border text-xs font-bold transition-all cursor-pointer ${
+          isEquipped
+            ? 'bg-cyan-500 text-black border-cyan-400'
+            : isUnlocked
+            ? 'bg-slate-900 border-slate-800 text-slate-300 hover:text-white'
+            : 'bg-slate-950 border-slate-900 text-slate-600 opacity-50 cursor-not-allowed'
+        }`;
+        btn.innerText = `${tName} ${isEquipped ? '✓' : ''}`;
+        if (isUnlocked) {
+          btn.onclick = () => {
+            gameState.equippedTitle = tName;
+            saveState();
+            renderCollectionUI();
+            updateHeaderAndHubUI();
+            soundEngine.playTap();
+          };
+        }
+        titleContainer.appendChild(btn);
+      });
+    }
+
+    function renderShopUI() {
+      document.getElementById('shopCoinsDisplay').innerText = gameState.coins;
+      const buyShieldBtn = document.getElementById('buyShieldBtn');
+      if (gameState.streakShield >= 1) {
+        buyShieldBtn.innerText = 'MAX 1 HELD';
+        buyShieldBtn.disabled = true;
+        buyShieldBtn.className = "px-3 py-1.5 rounded-xl bg-slate-800 text-slate-500 text-xs font-bold cursor-not-allowed";
+      } else {
+        buyShieldBtn.innerText = '400 🪙';
+        buyShieldBtn.disabled = false;
+        buyShieldBtn.className = "px-3 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-black text-xs font-bold cursor-pointer transition-all";
+      }
+    }
+
+    function buyStreakShield() {
+      if (gameState.streakShield >= 1) return;
+      if (gameState.coins >= 400) {
+        gameState.coins -= 400;
+        gameState.streakShield = 1;
+        saveState();
+        soundEngine.playUnlock();
+        renderShopUI();
+        updateHeaderAndHubUI();
+      } else {
+        soundEngine.playWrong();
+      }
+    }
+
+    function buyBooster() {
+      if (gameState.coins >= 250) {
+        gameState.coins -= 250;
+        gameState.activeBoosterGames += 5;
+        saveState();
+        soundEngine.playUnlock();
+        renderShopUI();
+      } else {
+        soundEngine.playWrong();
+      }
+    }
+
+    function showShieldInfo() {
+      soundEngine.playTap();
+      alert(`🛡️ STREAK SHIELD\n\nStatus: ${gameState.streakShield ? 'Active (1 held)' : 'None held'}\n\nEarned only by achieving a 10-perfect streak in Pattern Memory (or purchased in Shop).\nSaves you from 1 pattern mistake in Memory mode!`);
+    }
+
+    /* -------------------------------------------------------------------------
+     * 9. MODE 1: REFLEX SPEED CONTROLLER
+     * ------------------------------------------------------------------------- */
+    let reflexState = 'IDLE';
+    let reflexStartTime = 0;
+    let reflexTimer = null;
+
+    function startReflexMode() {
+      resetReflexUI();
+      showView('reflex');
+    }
+
+    function resetReflexUI() {
+      reflexState = 'IDLE';
+      clearTimeout(reflexTimer);
+      const pad = document.getElementById('reflexPad');
+      pad.className = "flex-1 my-3 rounded-3xl bg-slate-900 border-2 border-slate-800 flex flex-col items-center justify-center p-6 text-center cursor-pointer transition-all shadow-2xl select-none min-h-[320px]";
+      document.getElementById('reflexIcon').innerText = "👆";
+      document.getElementById('reflexMainText').innerText = "TAP TO START";
+      document.getElementById('reflexMainText').className = "text-2xl font-black uppercase text-white tracking-tight";
+      document.getElementById('reflexSubText').innerText = "When the box turns GREEN, tap as fast as possible!";
+      document.getElementById('reflexPbDisplay').innerText = gameState.highScores.reflex ? `${gameState.highScores.reflex} ms` : '-- ms';
+    }
+
+    function handleReflexTap() {
+      soundEngine.ensureContext();
+      triggerHaptic(20);
+      const pad = document.getElementById('reflexPad');
+
+      if (reflexState === 'IDLE') {
+        reflexState = 'WAITING';
+        soundEngine.playTap();
+        pad.className = "flex-1 my-3 rounded-3xl bg-rose-950/40 border-2 border-rose-500/50 flex flex-col items-center justify-center p-6 text-center cursor-pointer transition-all shadow-2xl min-h-[320px]";
+        document.getElementById('reflexIcon').innerText = "⏳";
+        document.getElementById('reflexMainText').innerText = "WAIT FOR GREEN...";
+        document.getElementById('reflexMainText').className = "text-2xl font-black uppercase text-rose-300 tracking-tight";
+        document.getElementById('reflexSubText').innerText = "Do not tap yet or early penalty applies!";
+
+        const randomDelay = Math.floor(Math.random() * 2600) + 1600;
+        reflexTimer = setTimeout(() => {
+          reflexState = 'READY';
+          reflexStartTime = performance.now();
+          soundEngine.playTap();
+          pad.className = "flex-1 my-3 rounded-3xl bg-emerald-500 border-2 border-emerald-400 flex flex-col items-center justify-center p-6 text-center cursor-pointer transition-all shadow-2xl min-h-[320px] animate-pulse-fast";
+          document.getElementById('reflexIcon').innerText = "⚡";
+          document.getElementById('reflexMainText').innerText = "TAP NOW!";
+          document.getElementById('reflexMainText').className = "text-4xl font-black uppercase text-black tracking-tight";
+          document.getElementById('reflexSubText').innerText = "";
+        }, randomDelay);
+
+      } else if (reflexState === 'WAITING') {
+        clearTimeout(reflexTimer);
+        reflexState = 'IDLE';
+        soundEngine.playWrong();
+        triggerHaptic([50, 50, 50]);
+        pad.className = "flex-1 my-3 rounded-3xl bg-amber-950/60 border-2 border-amber-500 flex flex-col items-center justify-center p-6 text-center cursor-pointer transition-all shadow-2xl min-h-[320px]";
+        document.getElementById('reflexIcon').innerText = "⚠️";
+        document.getElementById('reflexMainText').innerText = "TOO EARLY!";
+        document.getElementById('reflexMainText').className = "text-2xl font-black uppercase text-amber-400 tracking-tight";
+        document.getElementById('reflexSubText').innerText = "You anticipated. Tap to try again!";
+
+        // Count as completed round attempt
+        incrementRoundAndCheckQuote(false);
+
+      } else if (reflexState === 'READY') {
+        const elapsed = Math.round(performance.now() - reflexStartTime);
+        reflexState = 'IDLE';
+        soundEngine.playCorrect();
+
+        let rating = "AVERAGE";
+        let ratingColor = "text-slate-300";
+        let coinsReward = 5;
+        let xpReward = 20;
+        let isGood = elapsed < 270;
+
+        if (elapsed < 200) {
+          rating = "LIGHTNING ⚡";
+          ratingColor = "text-cyan-400";
+          coinsReward = 15;
+          xpReward = 50;
+        } else if (elapsed < 270) {
+          rating = "PRO 🏆";
+          ratingColor = "text-emerald-400";
+          coinsReward = 10;
+          xpReward = 35;
+        } else if (elapsed < 350) {
+          rating = "AVERAGE 🎯";
+          ratingColor = "text-amber-400";
+          coinsReward = 6;
+          xpReward = 25;
+        } else {
+          rating = "SLOW 🐢";
+          ratingColor = "text-rose-400";
+          coinsReward = 2;
+          xpReward = 15;
+        }
+
+        document.getElementById('reflexLastResult').innerText = `${elapsed} ms`;
+        document.getElementById('reflexRatingResult').innerText = rating;
+        document.getElementById('reflexRatingResult').className = `font-bold text-sm ${ratingColor}`;
+
+        if (!gameState.highScores.reflex || elapsed < gameState.highScores.reflex) {
+          gameState.highScores.reflex = elapsed;
+        }
+
+        addXpAndCoins(xpReward, coinsReward);
+
+        pad.className = "flex-1 my-3 rounded-3xl bg-slate-900 border-2 border-cyan-500/40 flex flex-col items-center justify-center p-6 text-center cursor-pointer transition-all shadow-2xl min-h-[320px]";
+        document.getElementById('reflexIcon').innerText = "⏱️";
+        document.getElementById('reflexMainText').innerText = `${elapsed} ms`;
+        document.getElementById('reflexMainText').className = "text-4xl font-mono font-black text-white tracking-tight";
+        document.getElementById('reflexSubText').innerText = `+${xpReward} XP · +${coinsReward} 🪙 · Tap to go again!`;
+
+        // Check if 3rd round for reflection quote
+        incrementRoundAndCheckQuote(isGood);
+      }
+    }
+
+    /* -------------------------------------------------------------------------
+     * 10. MODE 2: PATTERN MEMORY MATCH CONTROLLER
+     * ------------------------------------------------------------------------- */
+    let memorySequence = [];
+    let memoryStep = 0;
+    let memoryStreak = 0;
+    let memoryPlaying = false;
+    let memoryInputBlocked = true;
+
+    function startMemoryMode() {
+      memorySequence = [];
+      memoryStreak = 0;
+      memoryPlaying = false;
+      document.getElementById('memStatusText').innerText = "Press Start";
+      document.getElementById('memStreakDisplay').innerText = `0 / 10`;
+      document.getElementById('memStartBtn').classList.remove('hidden');
+
+      const shieldInd = document.getElementById('memShieldIndicator');
+      if (gameState.streakShield > 0) {
+        shieldInd.classList.remove('hidden');
+        shieldInd.classList.add('flex');
+      } else {
+        shieldInd.classList.add('hidden');
+      }
+
+      showView('memory');
+    }
+
+    function startMemoryGame() {
+      soundEngine.ensureContext();
+      document.getElementById('memStartBtn').classList.add('hidden');
+      memorySequence = [];
+      memoryStep = 0;
+      memoryStreak = 0;
+      memoryPlaying = true;
+      nextMemoryRound();
+    }
+
+    function nextMemoryRound() {
+      memoryStep = 0;
+      memoryInputBlocked = true;
+      document.getElementById('memStatusText').innerText = "Watch Pattern...";
+      document.getElementById('memStatusText').className = "text-xs font-bold text-amber-400 animate-pulse";
+
+      memorySequence.push(Math.floor(Math.random() * 4));
+      const delay = Math.max(200, 500 - (memorySequence.length * 20));
+
+      let i = 0;
+      const interval = setInterval(() => {
+        flashPad(memorySequence[i]);
+        soundEngine.playSimonNote(memorySequence[i]);
+        i++;
+        if (i >= memorySequence.length) {
+          clearInterval(interval);
+          setTimeout(() => {
+            memoryInputBlocked = false;
+            document.getElementById('memStatusText').innerText = `Repeat (${memorySequence.length} Steps)`;
+            document.getElementById('memStatusText').className = "text-xs font-bold text-emerald-400";
+          }, 300);
+        }
+      }, delay + 120);
+    }
+
+    function flashPad(padIdx) {
+      const pad = document.getElementById(`memPad${padIdx}`);
+      if (!pad) return;
+      pad.classList.add('brightness-200', 'scale-102');
+      setTimeout(() => {
+        pad.classList.remove('brightness-200', 'scale-102');
+      }, 180);
+    }
+
+    function handleMemoryPadTap(padIdx) {
+      if (!memoryPlaying || memoryInputBlocked) return;
+      soundEngine.ensureContext();
+      triggerHaptic(20);
+      flashPad(padIdx);
+      soundEngine.playSimonNote(padIdx);
+
+      if (padIdx === memorySequence[memoryStep]) {
+        memoryStep++;
+        if (memoryStep >= memorySequence.length) {
+          memoryInputBlocked = true;
+          memoryStreak++;
+          document.getElementById('memStreakDisplay').innerText = `${memoryStreak} / 10`;
+
+          if (memoryStreak === 10 && gameState.streakShield === 0) {
+            gameState.streakShield = 1;
+            soundEngine.playShieldAbsorb();
+            document.getElementById('memShieldIndicator').classList.remove('hidden');
+            document.getElementById('memShieldIndicator').classList.add('flex');
+            alert("🛡️ STREAK SHIELD EARNED!\n\nYou achieved a 10-perfect streak! Your shield is now active.");
+          }
+
+          if (memorySequence.length > gameState.highScores.memory) {
+            gameState.highScores.memory = memorySequence.length;
+          }
+
+          soundEngine.playCorrect();
+          addXpAndCoins(15 + memorySequence.length * 5, 4 + memorySequence.length);
+
+          setTimeout(() => {
+            nextMemoryRound();
+          }, 800);
+        }
+      } else {
+        if (gameState.streakShield > 0) {
+          gameState.streakShield = 0;
+          soundEngine.playShieldAbsorb();
+          saveState();
+          updateHeaderAndHubUI();
+          document.getElementById('memShieldIndicator').classList.add('hidden');
+          alert("🛡️ STREAK SHIELD SAVED YOU!\n\nYour shield absorbed the mistake. Repeating the round...");
+          setTimeout(() => {
+            memoryStep = 0;
+            memoryInputBlocked = false;
+          }, 500);
+          return;
+        }
+
+        memoryPlaying = false;
+        soundEngine.playWrong();
+        triggerHaptic([100, 50, 100]);
+        document.getElementById('memStatusText').innerText = "Sequence Broken!";
+        document.getElementById('memStatusText').className = "text-xs font-bold text-rose-400";
+        document.getElementById('memStartBtn').classList.remove('hidden');
+        document.getElementById('memStartBtn').innerText = "RETRY PATTERN MATCH";
+
+        const isGood = memorySequence.length >= 6;
+        incrementRoundAndCheckQuote(isGood);
+      }
+    }
+
+    /* -------------------------------------------------------------------------
+     * 11. MODE 3: SPEED MATH BLITZ CONTROLLER
+     * ------------------------------------------------------------------------- */
+    let mathPlaying = false;
+    let mathTimeLeft = 15;
+    let mathInterval = null;
+    let mathScore = 0;
+    let mathStreak = 0;
+    let currentMathAnswer = 0;
+
+    function startMathMode() {
+      mathPlaying = false;
+      mathScore = 0;
+      mathStreak = 0;
+      clearInterval(mathInterval);
+      document.getElementById('mathTimeBar').style.width = '100%';
+      document.getElementById('mathQuestionText').innerText = "Press Start!";
+      document.getElementById('mathScoreDisplay').innerText = "0";
+      document.getElementById('mathStreakDisplay').innerText = "0";
+      document.getElementById('mathStartBtn').classList.remove('hidden');
+
+      const opts = document.querySelectorAll('.math-opt');
+      opts.forEach(b => {
+        b.innerText = '--';
+        b.disabled = true;
+        b.classList.add('opacity-40');
+      });
+
+      showView('math');
+    }
+
+    function startMathGame() {
+      soundEngine.ensureContext();
+      mathPlaying = true;
+      mathScore = 0;
+      mathStreak = 0;
+      mathTimeLeft = 15;
+      document.getElementById('mathStartBtn').classList.add('hidden');
+
+      const opts = document.querySelectorAll('.math-opt');
+      opts.forEach(b => {
+        b.disabled = false;
+        b.classList.remove('opacity-40');
+      });
+
+      nextMathQuestion();
+
+      mathInterval = setInterval(() => {
+        mathTimeLeft -= 0.1;
+        const pct = Math.max(0, (mathTimeLeft / 15) * 100);
+        document.getElementById('mathTimeBar').style.width = `${pct}%`;
+
+        if (mathTimeLeft <= 0) {
+          endMathGame();
+        }
+      }, 100);
+    }
+
+    function nextMathQuestion() {
+      const ops = ['+', '-', '*'];
+      const op = ops[Math.floor(Math.random() * ops.length)];
+      let a = 0, b = 0, prompt = '';
+
+      if (op === '+') {
+        a = Math.floor(Math.random() * 35) + 5;
+        b = Math.floor(Math.random() * 35) + 5;
+        currentMathAnswer = a + b;
+        prompt = `${a} + ${b}`;
+      } else if (op === '-') {
+        a = Math.floor(Math.random() * 50) + 12;
+        b = Math.floor(Math.random() * (a - 4)) + 3;
+        currentMathAnswer = a - b;
+        prompt = `${a} − ${b}`;
+      } else {
+        a = Math.floor(Math.random() * 11) + 2;
+        b = Math.floor(Math.random() * 10) + 2;
+        currentMathAnswer = a * b;
+        prompt = `${a} × ${b}`;
+      }
+
+      document.getElementById('mathQuestionText').innerText = `${prompt} = ?`;
+
+      const set = new Set([currentMathAnswer]);
+      const offsets = [-1, 1, -2, 2, -10, 10, -5, 5];
+      while (set.size < 4) {
+        const off = offsets[Math.floor(Math.random() * offsets.length)];
+        const cand = currentMathAnswer + off;
+        if (cand >= 0) set.add(cand);
+      }
+
+      const arr = Array.from(set).sort(() => Math.random() - 0.5);
+      const opts = document.querySelectorAll('.math-opt');
+      opts.forEach((btn, idx) => {
+        btn.innerText = arr[idx];
+        btn.dataset.val = arr[idx];
+      });
+    }
+
+    function handleMathOptionTap(btnIdx) {
+      if (!mathPlaying) return;
+      soundEngine.ensureContext();
+      triggerHaptic(20);
+
+      const opts = document.querySelectorAll('.math-opt');
+      const chosen = parseInt(opts[btnIdx].dataset.val);
+
+      if (chosen === currentMathAnswer) {
+        soundEngine.playCorrect();
+        mathStreak++;
+        mathTimeLeft = Math.min(15, mathTimeLeft + 0.8);
+
+        const mult = mathStreak >= 6 ? 2.5 : mathStreak >= 3 ? 1.5 : 1.0;
+        const pts = Math.round(100 * mult);
+        mathScore += pts;
+
+        document.getElementById('mathScoreDisplay').innerText = mathScore;
+        document.getElementById('mathStreakDisplay').innerText = mathStreak;
+
+        nextMathQuestion();
+      } else {
+        soundEngine.playWrong();
+        mathStreak = 0;
+        mathTimeLeft = Math.max(0, mathTimeLeft - 1.5);
+        document.getElementById('mathStreakDisplay').innerText = "0";
+        nextMathQuestion();
+      }
+    }
+
+    function endMathGame() {
+      clearInterval(mathInterval);
+      mathPlaying = false;
+      soundEngine.playWrong();
+
+      const opts = document.querySelectorAll('.math-opt');
+      opts.forEach(b => {
+        b.disabled = true;
+        b.classList.add('opacity-40');
+      });
+
+      document.getElementById('mathQuestionText').innerText = `Blitz Over!`;
+      document.getElementById('mathStartBtn').classList.remove('hidden');
+      document.getElementById('mathStartBtn').innerText = "PLAY AGAIN";
+
+      if (mathScore > gameState.highScores.math) {
+        gameState.highScores.math = mathScore;
+      }
+
+      const earnedCoins = Math.round(mathScore / 80);
+      const earnedXp = Math.round(mathScore / 25);
+      addXpAndCoins(earnedXp, earnedCoins);
+
+      const isGood = mathScore >= 700;
+      incrementRoundAndCheckQuote(isGood);
+    }
+
+    /* -------------------------------------------------------------------------
+     * 11. BOT DUEL (1v1) ARENA, RANK SYSTEM & SHINY BADGES (40 STEPS · 8 TIERS)
+     * ------------------------------------------------------------------------- */
+    const TIER_CONFIG = [
+      {
+        id: 'rookie',
+        name: 'Rookie',
+        color: '#94a3b8',
+        borderClass: 'border-slate-500',
+        bgClass: 'bg-slate-500/10',
+        textClass: 'text-slate-400',
+        glowRgba: 'rgba(148, 163, 184, 0.4)',
+        desc: 'Standard mechanical training bots.',
+        rewardDesc: 'Rookie Tier Badge + 100 Coins',
+        tierRewardCoins: 100,
+        tierRewardTheme: null,
+        tierRewardTitle: 'Rookie Duelist'
+      },
+      {
+        id: 'spark',
+        name: 'Spark',
+        color: '#eab308',
+        borderClass: 'border-yellow-500',
+        bgClass: 'bg-yellow-500/10',
+        textClass: 'text-yellow-400',
+        glowRgba: 'rgba(234, 179, 8, 0.4)',
+        desc: 'Overclocked energy circuits with rapid pulses.',
+        rewardDesc: 'Spark Electro Theme + Spark Sound Pack + 200 Coins',
+        tierRewardCoins: 200,
+        tierRewardTheme: 'theme_spark',
+        tierRewardTitle: 'Spark Striker'
+      },
+      {
+        id: 'circuit',
+        name: 'Circuit',
+        color: '#06b6d4',
+        borderClass: 'border-cyan-500',
+        bgClass: 'bg-cyan-500/10',
+        textClass: 'text-cyan-400',
+        glowRgba: 'rgba(6, 182, 212, 0.45)',
+        desc: 'Advanced cybernetic microprocessors.',
+        rewardDesc: 'Circuit Grid Theme + "Circuit Racer" Title + 350 Coins',
+        tierRewardCoins: 350,
+        tierRewardTheme: 'theme_circuit',
+        tierRewardTitle: 'Circuit Racer'
+      },
+      {
+        id: 'volt',
+        name: 'Volt',
+        color: '#3b82f6',
+        borderClass: 'border-blue-500',
+        bgClass: 'bg-blue-500/10',
+        textClass: 'text-blue-400',
+        glowRgba: 'rgba(59, 130, 246, 0.45)',
+        desc: 'High-voltage lightning duel engines.',
+        rewardDesc: 'Volt Cobalt Theme + Volt Sound Pack + 500 Coins',
+        tierRewardCoins: 500,
+        tierRewardTheme: 'theme_volt',
+        tierRewardTitle: 'Volt Champion'
+      },
+      {
+        id: 'surge',
+        name: 'Surge',
+        color: '#a855f7',
+        borderClass: 'border-purple-500',
+        bgClass: 'bg-purple-500/10',
+        textClass: 'text-purple-400',
+        glowRgba: 'rgba(168, 85, 247, 0.45)',
+        desc: 'Overcharged plasma pulse calculating matrix.',
+        rewardDesc: 'Surge Violet Theme + "Surge Overlord" Title + 750 Coins',
+        tierRewardCoins: 750,
+        tierRewardTheme: 'theme_surge',
+        tierRewardTitle: 'Surge Overlord'
+      },
+      {
+        id: 'phantom',
+        name: 'Phantom',
+        color: '#ec4899',
+        borderClass: 'border-pink-500',
+        bgClass: 'bg-pink-500/10',
+        textClass: 'text-pink-400',
+        glowRgba: 'rgba(236, 72, 153, 0.45)',
+        desc: 'Stealth void neural models with instant inference.',
+        rewardDesc: 'Phantom Theme + Phantom Sound Pack + 1000 Coins',
+        tierRewardCoins: 1000,
+        tierRewardTheme: 'theme_phantom',
+        tierRewardTitle: 'Phantom Assassin'
+      },
+      {
+        id: 'apex',
+        name: 'Apex',
+        color: '#f97316',
+        borderClass: 'border-orange-500',
+        bgClass: 'bg-orange-500/10',
+        textClass: 'text-orange-400',
+        glowRgba: 'rgba(249, 115, 22, 0.5)',
+        desc: 'Apex predator cores at thermal capacity.',
+        rewardDesc: 'Apex Solar Theme + "Apex Predator" Title + 1500 Coins',
+        tierRewardCoins: 1500,
+        tierRewardTheme: 'theme_apex',
+        tierRewardTitle: 'Apex Predator'
+      },
+      {
+        id: 'mythic',
+        name: 'Mythic',
+        color: '#f59e0b',
+        borderClass: 'border-amber-400',
+        bgClass: 'bg-gradient-to-r from-amber-500/20 via-pink-500/20 to-cyan-500/20',
+        textClass: 'text-amber-400',
+        glowRgba: 'rgba(245, 158, 11, 0.65)',
+        desc: 'Legendary sentient cyber algorithms.',
+        rewardDesc: 'Mythic Prismatic Theme + Mythic Sound Pack + 2500 Coins',
+        tierRewardCoins: 2500,
+        tierRewardTheme: 'theme_mythic',
+        tierRewardTitle: 'Mythic Grandmaster'
+      }
+    ];
+
+    function getRankInfo(level) {
+      const safeLvl = Math.max(1, Math.min(40, level || 1));
+      const tierIndex = Math.min(7, Math.floor((safeLvl - 1) / 5));
+      const step = ((safeLvl - 1) % 5) + 1;
+      const tier = TIER_CONFIG[tierIndex];
+      const rankName = `${tier.name} ${step}`;
+      const isMaxTier = tierIndex === 7 && step === 5;
+      return {
+        level: safeLvl,
+        tierIndex,
+        step,
+        tier,
+        rankName,
+        isMaxTier
+      };
+    }
+
+    function renderRankBadgeSvg(tierIdx, step = 1, size = 48, showPips = true) {
+      const tier = TIER_CONFIG[tierIdx] || TIER_CONFIG[0];
+      const s = size;
+      const pColor = tier.color;
+
+      let badgeContent = '';
+
+      if (tierIdx === 0) {
+        // Rookie: Simple Steel Shield
+        badgeContent = `
+          <path d="M32 6 L52 14 V34 C52 47 32 58 32 58 C32 58 12 47 12 34 V14 Z" fill="url(#rookieGrad)" stroke="#94a3b8" stroke-width="2.5" />
+          <path d="M32 14 L44 20 V32 C44 41 32 49 32 49 C32 49 20 41 20 32 V20 Z" fill="#1e293b" stroke="#64748b" stroke-width="1.5" />
+          <path d="M32 20 L38 24 V31 C38 36 32 41 32 41 C32 41 26 36 26 31 V24 Z" fill="#94a3b8" />
+        `;
+      } else if (tierIdx === 1) {
+        // Spark: Shield with Lightning Bolt
+        badgeContent = `
+          <path d="M32 6 L52 14 V34 C52 47 32 58 32 58 C32 58 12 47 12 34 V14 Z" fill="url(#sparkGrad)" stroke="#eab308" stroke-width="2.5" />
+          <path d="M32 13 L45 19 V32 C45 42 32 50 32 50 C32 50 19 42 19 32 V19 Z" fill="#2d1f05" stroke="#ca8a04" stroke-width="1.5" />
+          <path d="M35 18 L24 33 H32 L27 46 L42 29 H34 Z" fill="#fef08a" stroke="#ca8a04" stroke-width="1" />
+        `;
+      } else if (tierIdx === 2) {
+        // Circuit: Hexagon with Circuit Lines
+        badgeContent = `
+          <polygon points="32,6 54,18 54,46 32,58 10,46 10,18" fill="url(#circuitGrad)" stroke="#06b6d4" stroke-width="2.5" />
+          <polygon points="32,13 47,22 47,42 32,51 17,42 17,22" fill="#04202c" stroke="#0891b2" stroke-width="1.5" />
+          <line x1="32" y1="13" x2="32" y2="24" stroke="#22d3ee" stroke-width="1.8" />
+          <line x1="17" y1="32" x2="26" y2="32" stroke="#22d3ee" stroke-width="1.8" />
+          <line x1="47" y1="32" x2="38" y2="32" stroke="#22d3ee" stroke-width="1.8" />
+          <line x1="32" y1="40" x2="32" y2="51" stroke="#22d3ee" stroke-width="1.8" />
+          <polygon points="32,25 39,32 32,39 25,32" fill="#06b6d4" stroke="#e0f2fe" stroke-width="1.2" />
+        `;
+      } else if (tierIdx === 3) {
+        // Volt: Winged Shield
+        badgeContent = `
+          <path d="M8 24 C14 16 24 20 28 26 L22 36 C16 34 10 32 8 24 Z" fill="#1d4ed8" stroke="#60a5fa" stroke-width="1.2" opacity="0.9" />
+          <path d="M56 24 C50 16 40 20 36 26 L42 36 C48 34 54 32 56 24 Z" fill="#1d4ed8" stroke="#60a5fa" stroke-width="1.2" opacity="0.9" />
+          <path d="M32 7 L50 15 V33 C50 46 32 57 32 57 C32 57 14 46 14 33 V15 Z" fill="url(#voltGrad)" stroke="#3b82f6" stroke-width="2.5" />
+          <polygon points="32,19 40,29 32,41 24,29" fill="#93c5fd" stroke="#1d4ed8" stroke-width="1.2" />
+          <polygon points="32,23 37,29 32,37 27,29" fill="#ffffff" />
+        `;
+      } else if (tierIdx === 4) {
+        // Surge: 8-Point Starburst
+        badgeContent = `
+          <path d="M32 5 L37 21 L53 15 L43 28 L57 38 L41 41 L39 57 L29 45 L15 51 L21 37 L7 29 L23 25 Z" fill="url(#surgeGrad)" stroke="#a855f7" stroke-width="2" />
+          <polygon points="32,17 38,28 50,32 38,36 32,47 26,36 14,32 26,28" fill="#581c87" stroke="#c084fc" stroke-width="1.5" />
+          <circle cx="32" cy="32" r="5" fill="#f3e8ff" />
+        `;
+      } else if (tierIdx === 5) {
+        // Phantom: Crown-like Imperial Emblem
+        badgeContent = `
+          <path d="M12 24 L22 34 L32 14 L42 34 L52 24 L49 46 C49 53 32 58 32 58 C32 58 15 53 15 46 Z" fill="url(#phantomGrad)" stroke="#ec4899" stroke-width="2.5" />
+          <path d="M22 36 L32 24 L42 36 L32 46 Z" fill="#4a044e" stroke="#f472b6" stroke-width="1.5" />
+          <rect x="25" y="38" width="14" height="4" rx="2" fill="#fbcfe8" />
+        `;
+      } else if (tierIdx === 6) {
+        // Apex: Jeweled Royal Crest
+        badgeContent = `
+          <polygon points="32,5 53,16 48,36 54,48 32,58 10,48 16,36 11,16" fill="url(#apexGrad)" stroke="#f97316" stroke-width="2.5" />
+          <polygon points="32,14 44,22 40,36 44,45 32,51 20,45 24,36 20,22" fill="#431407" stroke="#fb923c" stroke-width="1.5" />
+          <polygon points="32,22 39,32 32,42 25,32" fill="#fdba74" stroke="#ea580c" stroke-width="1.2" />
+          <polygon points="32,26 36,32 32,38 28,32" fill="#ffffff" />
+        `;
+      } else {
+        // Mythic: Animated Legendary Emblem
+        badgeContent = `
+          <g class="mythic-ring-spin">
+            <circle cx="32" cy="32" r="26" fill="none" stroke="url(#mythicGrad)" stroke-width="2.2" stroke-dasharray="8 6" opacity="0.85" />
+            <circle cx="32" cy="6" r="2.5" fill="#fef08a" />
+            <circle cx="58" cy="32" r="2.5" fill="#67e8f9" />
+            <circle cx="32" cy="58" r="2.5" fill="#f472b6" />
+            <circle cx="6" cy="32" r="2.5" fill="#fde047" />
+          </g>
+          <g class="mythic-aura">
+            <path d="M32 9 L36 22 L49 19 L41 30 L51 39 L38 41 L32 55 L26 41 L13 39 L23 30 L15 19 L28 22 Z" fill="url(#mythicGrad)" stroke="#f59e0b" stroke-width="2" />
+            <polygon points="32,19 36,28 45,32 36,36 32,45 28,36 19,32 28,28" fill="#180e29" stroke="#fcd34d" stroke-width="1.5" />
+            <polygon points="32,24 35,32 32,40 29,32" fill="#ffffff" />
+          </g>
+        `;
+      }
+
+      let pipsHtml = '';
+      if (showPips) {
+        let pips = '';
+        for (let i = 1; i <= 5; i++) {
+          if (i <= step) {
+            pips += `<span class="w-1.5 h-1.5 rounded-full inline-block" style="background:${pColor}; box-shadow: 0 0 6px ${pColor};"></span>`;
+          } else {
+            pips += `<span class="w-1.5 h-1.5 rounded-full inline-block bg-slate-800 border border-slate-700"></span>`;
+          }
+        }
+        pipsHtml = `<div class="flex items-center justify-center gap-1 mt-1">${pips}</div>`;
+      }
+
+      return `
+        <div class="relative inline-flex flex-col items-center justify-center select-none">
+          <div class="relative overflow-hidden rounded-full flex items-center justify-center" style="width:${s}px; height:${s}px;">
+            <svg viewBox="0 0 64 64" width="${s}" height="${s}" class="shrink-0 drop-shadow-md">
+              <defs>
+                <linearGradient id="rookieGrad" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%" stop-color="#475569" />
+                  <stop offset="100%" stop-color="#1e293b" />
+                </linearGradient>
+                <linearGradient id="sparkGrad" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%" stop-color="#ca8a04" />
+                  <stop offset="100%" stop-color="#422006" />
+                </linearGradient>
+                <linearGradient id="circuitGrad" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%" stop-color="#0891b2" />
+                  <stop offset="100%" stop-color="#082f49" />
+                </linearGradient>
+                <linearGradient id="voltGrad" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%" stop-color="#2563eb" />
+                  <stop offset="100%" stop-color="#0f172a" />
+                </linearGradient>
+                <linearGradient id="surgeGrad" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%" stop-color="#9333ea" />
+                  <stop offset="100%" stop-color="#2e1065" />
+                </linearGradient>
+                <linearGradient id="phantomGrad" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%" stop-color="#db2777" />
+                  <stop offset="100%" stop-color="#500724" />
+                </linearGradient>
+                <linearGradient id="apexGrad" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%" stop-color="#ea580c" />
+                  <stop offset="100%" stop-color="#431407" />
+                </linearGradient>
+                <linearGradient id="mythicGrad" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%" stop-color="#f59e0b" />
+                  <stop offset="50%" stop-color="#ec4899" />
+                  <stop offset="100%" stop-color="#06b6d4" />
+                </linearGradient>
+              </defs>
+              ${badgeContent}
+            </svg>
+            <div class="badge-shine-effect"></div>
+          </div>
+          ${pipsHtml}
+        </div>
+      `;
+    }
+
+    // Bot Duel Match State
+    let duelPlayerScore = 0;
+    let duelBotScore = 0;
+    let duelMatchActive = false;
+    let duelRoundActive = false;
+    let duelCurrentAnswer = 0;
+    let duelBotTimer = null;
+    let duelCountdownInterval = null;
+    let duelBotThinkingInterval = null;
+    let duelPlayerLockedOut = false;
+    let duelLockoutTimer = null;
+
+    function clearDuelTimers() {
+      if (duelCountdownInterval) { clearInterval(duelCountdownInterval); duelCountdownInterval = null; }
+      if (duelBotTimer) { clearTimeout(duelBotTimer); duelBotTimer = null; }
+      if (duelBotThinkingInterval) { clearInterval(duelBotThinkingInterval); duelBotThinkingInterval = null; }
+      if (duelLockoutTimer) { clearTimeout(duelLockoutTimer); duelLockoutTimer = null; }
+      duelPlayerLockedOut = false;
+      duelRoundActive = false;
+    }
+
+    function handleBotDuelCardClick() {
+      if (gameState.level < 10) {
+        soundEngine.playWrong();
+        triggerHaptic([40, 40]);
+        alert(`🔒 BOT DUEL (1v1) LOCKED\n\nReach Player Level 10 in normal play to unlock the 40-Rank Bot Duel Arena!\n(Current: Level ${gameState.level} / 10)`);
+        return;
+      }
+      showView('duel');
+    }
+
+    function renderDuelUI() {
+      clearDuelTimers();
+      const pRank = getRankInfo(gameState.duelLevel);
+      const botLvl = gameState.duelLevel;
+      const bRank = getRankInfo(botLvl);
+
+      // Player side
+      document.getElementById('duelPlayerRankText').innerText = pRank.rankName;
+      document.getElementById('duelPlayerBadgeSmall').innerHTML = renderRankBadgeSvg(pRank.tierIndex, pRank.step, 20, false);
+      document.getElementById('duelPlayerAvatarBadge').innerHTML = renderRankBadgeSvg(pRank.tierIndex, pRank.step, 40, false);
+      document.getElementById('duelPlayerNameLabel').innerText = pRank.rankName;
+
+      // Bot side
+      document.getElementById('duelBotNameLabel').innerText = `${bRank.rankName} Bot`;
+      document.getElementById('duelBotAvatarBadge').innerHTML = renderRankBadgeSvg(bRank.tierIndex, bRank.step, 40, false);
+
+      // Hero matchup preview
+      document.getElementById('duelMatchupHeroBadge').innerHTML = renderRankBadgeSvg(bRank.tierIndex, bRank.step, 76, true);
+      document.getElementById('duelBotHeroName').innerText = `${bRank.rankName} Bot`;
+      document.getElementById('duelBotTierSubtitle').innerText = `BOT RANK ${botLvl} / 40 · ${bRank.tier.name.toUpperCase()} TIER`;
+      document.getElementById('duelBotHeroDesc').innerText = bRank.tier.desc;
+
+      // Speed estimate
+      const estTime = (6.0 - ((botLvl - 1) * (6.0 - 1.4) / 39)).toFixed(1);
+      document.getElementById('duelBotSpeedEst').innerText = `Speed: ~${estTime}s`;
+      document.getElementById('duelBotThinkingLabel').innerText = "Bot Status: Standby";
+
+      // Scores
+      duelPlayerScore = 0;
+      duelBotScore = 0;
+      updateDuelScoreUI();
+
+      // UI states
+      document.getElementById('duelPreGameCard').classList.remove('hidden');
+      document.getElementById('duelCountdownOverlay').classList.add('hidden');
+      document.getElementById('duelQuestionContainer').classList.add('hidden');
+      document.getElementById('duelResultCard').classList.add('hidden');
+      document.getElementById('duelLockoutBanner').classList.add('hidden');
+      document.getElementById('duelRoundToast').classList.add('hidden');
+      document.getElementById('duelBotProgressBar').style.width = '0%';
+
+      updateDuelRewardTrackUI();
+    }
+
+    function updateDuelScoreUI() {
+      document.getElementById('duelPlayerScore').innerText = duelPlayerScore;
+      document.getElementById('duelBotScore').innerText = duelBotScore;
+
+      // Player pips
+      const pPipsEl = document.getElementById('duelPlayerPips');
+      if (pPipsEl) {
+        let pHtml = '';
+        for (let i = 1; i <= 3; i++) {
+          if (i <= duelPlayerScore) {
+            pHtml += `<span class="w-1.5 h-1.5 rounded-full bg-cyan-400 shadow-[0_0_6px_rgba(6,182,212,0.8)]"></span>`;
+          } else {
+            pHtml += `<span class="w-1.5 h-1.5 rounded-full bg-slate-800 border border-slate-700"></span>`;
+          }
+        }
+        pPipsEl.innerHTML = pHtml;
+      }
+
+      // Bot pips
+      const bPipsEl = document.getElementById('duelBotPips');
+      if (bPipsEl) {
+        let bHtml = '';
+        for (let i = 1; i <= 3; i++) {
+          if (i <= duelBotScore) {
+            bHtml += `<span class="w-1.5 h-1.5 rounded-full bg-amber-400 shadow-[0_0_6px_rgba(245,158,11,0.8)]"></span>`;
+          } else {
+            bHtml += `<span class="w-1.5 h-1.5 rounded-full bg-slate-800 border border-slate-700"></span>`;
+          }
+        }
+        bPipsEl.innerHTML = bHtml;
+      }
+    }
+
+    function updateDuelRewardTrackUI() {
+      const curLvl = gameState.duelLevel;
+      const curTierIdx = Math.floor((curLvl - 1) / 5);
+      const nextTierMilestone = Math.min(40, (curTierIdx + 1) * 5 + 1);
+      const prevTierMilestone = curTierIdx * 5 + 1;
+
+      const curTier = TIER_CONFIG[curTierIdx];
+      const nextTierIdx = Math.min(7, curTierIdx + 1);
+      const nextTier = TIER_CONFIG[nextTierIdx];
+
+      document.getElementById('duelTrackPrevBadge').innerHTML = renderRankBadgeSvg(curTierIdx, 1, 24, false);
+      document.getElementById('duelTrackPrevName').innerText = curTier.name;
+
+      document.getElementById('duelTrackNextBadge').innerHTML = renderRankBadgeSvg(nextTierIdx, 1, 24, false);
+      document.getElementById('duelTrackNextName').innerText = nextTier.name;
+
+      if (curLvl >= 40) {
+        document.getElementById('duelTrackProgressText').innerText = "Max Tier Reached!";
+        document.getElementById('duelTrackProgressBar').style.width = "100%";
+      } else {
+        const stepInTier = ((curLvl - 1) % 5);
+        const pct = Math.min(100, Math.round((stepInTier / 5) * 100));
+        document.getElementById('duelTrackProgressText').innerText = `${nextTier.name} in ${5 - stepInTier} wins`;
+        document.getElementById('duelTrackProgressBar').style.width = `${pct}%`;
+      }
+    }
+
+    function startBotDuelMatch() {
+      soundEngine.ensureContext();
+      clearDuelTimers();
+
+      duelPlayerScore = 0;
+      duelBotScore = 0;
+      updateDuelScoreUI();
+
+      document.getElementById('duelPreGameCard').classList.add('hidden');
+      document.getElementById('duelResultCard').classList.add('hidden');
+
+      // Countdown overlay
+      const cdOverlay = document.getElementById('duelCountdownOverlay');
+      const cdNum = document.getElementById('duelCountdownNumber');
+      cdOverlay.classList.remove('hidden');
+
+      let count = 3;
+      cdNum.innerText = count;
+      soundEngine.playTick();
+      triggerHaptic(20);
+
+      duelCountdownInterval = setInterval(() => {
+        count--;
+        if (count > 0) {
+          cdNum.innerText = count;
+          soundEngine.playTick();
+          triggerHaptic(20);
+        } else if (count === 0) {
+          cdNum.innerText = "GO!";
+          cdNum.className = "text-7xl font-mono font-black text-emerald-400 animate-pulse";
+          soundEngine.playGo();
+          triggerHaptic([30, 30]);
+        } else {
+          clearInterval(duelCountdownInterval);
+          duelCountdownInterval = null;
+          cdOverlay.classList.add('hidden');
+          cdNum.className = "text-7xl font-mono font-black text-amber-400 animate-bounce-short";
+          document.getElementById('duelQuestionContainer').classList.remove('hidden');
+          duelMatchActive = true;
+          nextDuelQuestion();
+        }
+      }, 700);
+    }
+
+    function nextDuelQuestion() {
+      if (!duelMatchActive) return;
+      clearDuelTimers();
+
+      duelRoundActive = true;
+      duelPlayerLockedOut = false;
+      document.getElementById('duelLockoutBanner').classList.add('hidden');
+      document.getElementById('duelRoundToast').classList.add('hidden');
+      document.getElementById('duelBotProgressBar').style.width = '0%';
+      document.getElementById('duelBotProgressBar').className = "h-full bg-gradient-to-r from-amber-500 to-rose-500 transition-all duration-100 ease-linear";
+      document.getElementById('duelBotThinkingLabel').innerText = "Bot Thinking...";
+
+      // Re-enable options
+      const opts = document.querySelectorAll('.duel-opt');
+      opts.forEach(b => {
+        b.disabled = false;
+        b.classList.remove('opacity-40', 'border-rose-500', 'bg-rose-500/20');
+        b.classList.add('hover:bg-slate-800');
+      });
+
+      // Generate question
+      const botLvl = gameState.duelLevel;
+      let a = 0, b = 0, op = '+', prompt = '';
+      const ops = botLvl > 20 ? ['+', '-', '*', 'comp'] : botLvl > 10 ? ['+', '-', '*'] : ['+', '-'];
+      op = ops[Math.floor(Math.random() * ops.length)];
+
+      if (op === '+') {
+        a = Math.floor(Math.random() * (20 + botLvl)) + 5;
+        b = Math.floor(Math.random() * (20 + botLvl)) + 5;
+        duelCurrentAnswer = a + b;
+        prompt = `${a} + ${b}`;
+      } else if (op === '-') {
+        a = Math.floor(Math.random() * (30 + botLvl)) + 15;
+        b = Math.floor(Math.random() * (a - 5)) + 4;
+        duelCurrentAnswer = a - b;
+        prompt = `${a} − ${b}`;
+      } else if (op === '*') {
+        a = Math.floor(Math.random() * 9) + 3;
+        b = Math.floor(Math.random() * 8) + 3;
+        duelCurrentAnswer = a * b;
+        prompt = `${a} × ${b}`;
+      } else {
+        // Compound
+        a = Math.floor(Math.random() * 8) + 2;
+        b = Math.floor(Math.random() * 7) + 2;
+        const c = Math.floor(Math.random() * 12) + 2;
+        duelCurrentAnswer = (a * b) - c;
+        prompt = `(${a} × ${b}) − ${c}`;
+      }
+
+      document.getElementById('duelQuestionText').innerText = `${prompt} = ?`;
+
+      // 4 multiple-choice choices
+      const set = new Set([duelCurrentAnswer]);
+      const offsets = [-1, 1, -2, 2, -10, 10, -5, 5];
+      while (set.size < 4) {
+        const off = offsets[Math.floor(Math.random() * offsets.length)];
+        const cand = duelCurrentAnswer + off;
+        if (cand >= 0) set.add(cand);
+      }
+      const arr = Array.from(set).sort(() => Math.random() - 0.5);
+      opts.forEach((btn, idx) => {
+        btn.innerText = arr[idx];
+        btn.dataset.val = arr[idx];
+      });
+
+      // Calculate Bot scheduled reaction time
+      // Level 1 = 6.0s, Level 40 = 1.4s with +/- 20% variation
+      const baseTime = 6.0 - ((botLvl - 1) * (6.0 - 1.4) / 39);
+      const variation = (Math.random() * 0.4) - 0.2; // +/- 20%
+      const botTimeSec = Math.max(1.1, baseTime * (1 + variation));
+      const wrongChance = 0.28 - ((botLvl - 1) * (0.28 - 0.03) / 39);
+      const botWillAnswerCorrect = Math.random() > wrongChance;
+
+      const startTime = performance.now();
+      const totalMs = botTimeSec * 1000;
+
+      duelBotThinkingInterval = setInterval(() => {
+        if (!duelRoundActive) {
+          clearInterval(duelBotThinkingInterval);
+          return;
+        }
+        const elapsed = performance.now() - startTime;
+        const pct = Math.min(100, Math.round((elapsed / totalMs) * 100));
+        document.getElementById('duelBotProgressBar').style.width = `${pct}%`;
+
+        if (elapsed >= totalMs) {
+          clearInterval(duelBotThinkingInterval);
+          duelBotThinkingInterval = null;
+          handleDuelBotAnswer(botWillAnswerCorrect);
+        }
+      }, 40);
+    }
+
+    function handleDuelBotAnswer(isCorrect) {
+      if (!duelRoundActive) return;
+
+      if (isCorrect) {
+        // Bot scores!
+        duelRoundActive = false;
+        duelBotScore++;
+        updateDuelScoreUI();
+        soundEngine.playWrong();
+        triggerHaptic([80, 80]);
+
+        showDuelToast("🤖 BOT SCORED! The bot beat you to it.", "text-amber-400", "bg-amber-500/20 border-amber-500/40");
+
+        if (duelBotScore >= 3) {
+          setTimeout(() => endDuelMatch(false), 1200);
+        } else {
+          setTimeout(() => nextDuelQuestion(), 1300);
+        }
+      } else {
+        // Bot guessed wrong!
+        soundEngine.playTick();
+        document.getElementById('duelBotThinkingLabel').innerText = "Bot Guessed Wrong! Your chance!";
+        document.getElementById('duelBotProgressBar').className = "h-full bg-rose-600 transition-all";
+        showDuelToast("⚠️ Bot Guessed Wrong! Tap your answer!", "text-cyan-300", "bg-cyan-500/20 border-cyan-500/40");
+      }
+    }
+
+    function handleDuelPlayerOptionTap(btnIdx) {
+      if (!duelMatchActive || !duelRoundActive || duelPlayerLockedOut) return;
+      soundEngine.ensureContext();
+
+      const opts = document.querySelectorAll('.duel-opt');
+      const clickedBtn = opts[btnIdx];
+      const chosen = parseInt(clickedBtn.dataset.val, 10);
+
+      if (chosen === duelCurrentAnswer) {
+        // PLAYER SCORES!
+        duelRoundActive = false;
+        clearInterval(duelBotThinkingInterval);
+        duelBotThinkingInterval = null;
+
+        duelPlayerScore++;
+        updateDuelScoreUI();
+        soundEngine.playCorrect();
+        triggerHaptic(30);
+
+        clickedBtn.classList.add('bg-emerald-500', 'text-black', 'border-emerald-400');
+        showDuelToast("⚡ POINT TO YOU! Fast reflex!", "text-emerald-300", "bg-emerald-500/20 border-emerald-500/40");
+
+        if (duelPlayerScore >= 3) {
+          setTimeout(() => endDuelMatch(true), 1200);
+        } else {
+          setTimeout(() => nextDuelQuestion(), 1300);
+        }
+      } else {
+        // WRONG ANSWER: 1-SECOND LOCKOUT!
+        soundEngine.playLockout();
+        triggerHaptic([60, 60]);
+        duelPlayerLockedOut = true;
+
+        clickedBtn.classList.add('bg-rose-500/20', 'border-rose-500', 'opacity-40');
+        clickedBtn.disabled = true;
+
+        // Show lockout banner
+        const banner = document.getElementById('duelLockoutBanner');
+        banner.classList.remove('hidden');
+
+        opts.forEach(b => {
+          b.disabled = true;
+          b.classList.add('opacity-50');
+        });
+
+        let lockLeft = 1.0;
+        const timeSpan = document.getElementById('duelLockoutTime');
+        const lockInt = setInterval(() => {
+          lockLeft -= 0.1;
+          if (timeSpan) timeSpan.innerText = Math.max(0, lockLeft).toFixed(1);
+          if (lockLeft <= 0) {
+            clearInterval(lockInt);
+          }
+        }, 100);
+
+        duelLockoutTimer = setTimeout(() => {
+          duelPlayerLockedOut = false;
+          banner.classList.add('hidden');
+          opts.forEach(b => {
+            if (parseInt(b.dataset.val, 10) !== chosen) {
+              b.disabled = false;
+              b.classList.remove('opacity-50');
+            }
+          });
+        }, 1000);
+      }
+    }
+
+    function showDuelToast(msg, textClass, bgClass) {
+      const toast = document.getElementById('duelRoundToast');
+      if (!toast) return;
+      toast.className = `glass-panel p-2 rounded-xl text-center text-xs font-bold my-1 ${textClass} ${bgClass}`;
+      toast.innerText = msg;
+      toast.classList.remove('hidden');
+    }
+
+    function endDuelMatch(playerWon) {
+      clearDuelTimers();
+      duelMatchActive = false;
+
+      document.getElementById('duelQuestionContainer').classList.add('hidden');
+      const resCard = document.getElementById('duelResultCard');
+      resCard.classList.remove('hidden');
+
+      const botLvl = gameState.duelLevel;
+      const curRank = getRankInfo(botLvl);
+
+      // Quote check (every 3 rounds rule)
+      incrementRoundAndCheckQuote(playerWon);
+
+      if (playerWon) {
+        soundEngine.playLevelUp();
+        triggerHaptic([50, 100, 150]);
+
+        const coinsWon = 25 + (botLvl * 6);
+        const xpWon = 40 + (botLvl * 8);
+        addXpAndCoins(xpWon, coinsWon);
+
+        document.getElementById('duelResultIcon').innerText = "🏆";
+        document.getElementById('duelResultSubtitle').innerText = "DUEL VICTORY";
+        document.getElementById('duelResultSubtitle').className = "text-[10px] font-mono font-bold uppercase tracking-widest text-emerald-400";
+        document.getElementById('duelResultTitle').innerText = "MATCH WON!";
+        document.getElementById('duelResultScoreText').innerText = `Final Score: ${duelPlayerScore} — ${duelBotScore}`;
+        document.getElementById('duelWonCoins').innerText = coinsWon;
+        document.getElementById('duelWonXp').innerText = xpWon;
+        document.getElementById('duelResultRewardsBox').classList.remove('hidden');
+
+        if (botLvl >= 40) {
+          // GRAND FINALE: Beat Level 40 Mythic 5!
+          document.getElementById('duelResultNextText').innerText = "👑 LEGENDARY! You conquered all 40 Bot Duel Ranks!";
+          document.getElementById('duelNextActionBtn').innerText = "PLAY AGAIN";
+          triggerMythicGrandmasterFinale();
+        } else {
+          const nextLvl = botLvl + 1;
+          gameState.duelLevel = nextLvl;
+          saveState();
+
+          const nextRank = getRankInfo(nextLvl);
+          document.getElementById('duelResultNextText').innerText = `Advanced to ${nextRank.rankName}!`;
+          document.getElementById('duelNextActionBtn').innerText = "NEXT DUEL";
+
+          // Entering a new tier (every 5 levels: 6, 11, 16, 21, 26, 31, 36)
+          if (botLvl % 5 === 0) {
+            setTimeout(() => {
+              triggerTierRankUpCelebration(nextRank.tierIndex);
+            }, 800);
+          } else {
+            soundEngine.playRankUpSparkle();
+          }
+        }
+      } else {
+        // Player defeated: Lose to retry same level
+        soundEngine.playGameOver();
+        triggerHaptic([60, 100, 60]);
+
+        const coinsConsolation = 10;
+        const xpConsolation = 15;
+        addXpAndCoins(xpConsolation, coinsConsolation);
+
+        document.getElementById('duelResultIcon').innerText = "💔";
+        document.getElementById('duelResultSubtitle').innerText = "DUEL DEFEATED";
+        document.getElementById('duelResultSubtitle').className = "text-[10px] font-mono font-bold uppercase tracking-widest text-rose-400";
+        document.getElementById('duelResultTitle').innerText = "BOT WON";
+        document.getElementById('duelResultScoreText').innerText = `Final Score: ${duelPlayerScore} — ${duelBotScore}`;
+        document.getElementById('duelWonCoins').innerText = coinsConsolation;
+        document.getElementById('duelWonXp').innerText = xpConsolation;
+        document.getElementById('duelResultRewardsBox').classList.remove('hidden');
+        document.getElementById('duelResultNextText').innerText = `${curRank.rankName} Bot was faster. Retry to conquer this rank!`;
+        document.getElementById('duelNextActionBtn').innerText = "RETRY DUEL";
+      }
+
+      updateHeaderAndHubUI();
+    }
+
+    function handleDuelNextAction() {
+      renderDuelUI();
+    }
+
+    function triggerTierRankUpCelebration(tierIdx) {
+      const tier = TIER_CONFIG[tierIdx] || TIER_CONFIG[1];
+      soundEngine.playTierGrandFanfare();
+      triggerHaptic([100, 150, 200]);
+
+      // Screen flash
+      const flash = document.getElementById('tierFlashOverlay');
+      if (flash) {
+        flash.style.opacity = '0.85';
+        setTimeout(() => { flash.style.opacity = '0'; }, 100);
+      }
+
+      // Large shiny badge
+      document.getElementById('tierModalBadgeContainer').innerHTML = renderRankBadgeSvg(tierIdx, 1, 96, true);
+      document.getElementById('tierModalTitle').innerText = `WELCOME TO ${tier.name.toUpperCase()}!`;
+      document.getElementById('tierModalDesc').innerText = `You entered Tier ${tierIdx + 1}! All bot duelists now battle with ${tier.name} technology.`;
+
+      // Reward details
+      const coinsReward = tier.tierRewardCoins || 250;
+      gameState.coins += coinsReward;
+      document.getElementById('tierRewardCoinsText').innerText = `+${coinsReward} Coins Bundle`;
+
+      if (tier.tierRewardTheme) {
+        if (!gameState.unlockedRewards.includes(tier.tierRewardTheme)) {
+          gameState.unlockedRewards.push(tier.tierRewardTheme);
+        }
+        document.getElementById('tierRewardThemeItem').classList.remove('hidden');
+        document.getElementById('tierRewardThemeText').innerText = `${tier.name} Exclusive Theme`;
+      } else {
+        document.getElementById('tierRewardThemeItem').classList.add('hidden');
+      }
+
+      if (tier.tierRewardTitle) {
+        const titleId = `title_${tier.tierRewardTitle.toLowerCase().replace(/\s+/g, '_')}`;
+        if (!gameState.unlockedRewards.includes(titleId)) {
+          gameState.unlockedRewards.push(titleId);
+        }
+        document.getElementById('tierRewardTitleItem').classList.remove('hidden');
+        document.getElementById('tierRewardTitleText').innerText = `"${tier.tierRewardTitle}" Title`;
+      } else {
+        document.getElementById('tierRewardTitleItem').classList.add('hidden');
+      }
+
+      saveState();
+      updateHeaderAndHubUI();
+
+      const modal = document.getElementById('tierRankUpModal');
+      modal.classList.remove('hidden');
+    }
+
+    function closeTierRankUpModal() {
+      document.getElementById('tierRankUpModal').classList.add('hidden');
+      renderDuelUI();
+    }
+
+    function triggerMythicGrandmasterFinale() {
+      soundEngine.playTierGrandFanfare();
+      // Unlock Mythic Grandmaster title, animated theme, and 5000 coins
+      const titleId = 'title_mythic_grandmaster';
+      if (!gameState.unlockedRewards.includes(titleId)) {
+        gameState.unlockedRewards.push(titleId);
+      }
+      if (!gameState.unlockedRewards.includes('theme_mythic')) {
+        gameState.unlockedRewards.push('theme_mythic');
+      }
+      gameState.coins += 5000;
+      saveState();
+      updateHeaderAndHubUI();
+
+      setTimeout(() => {
+        triggerTierRankUpCelebration(7);
+        document.getElementById('tierModalTitle').innerText = "MYTHIC GRANDMASTER!";
+        document.getElementById('tierModalDesc').innerText = "You have conquered all 40 ranks of neural bots! You hold the highest ranking in the Arena.";
+        document.getElementById('tierRewardCoinsText').innerText = "+5000 Coins Grand Reward!";
+      }, 600);
+    }
+
+    /* -------------------------------------------------------------------------
+     * RANK LADDER SCREEN (8 TIERS · 40 STEPS)
+     * ------------------------------------------------------------------------- */
+    function renderLadderUI() {
+      const pRank = getRankInfo(gameState.duelLevel);
+
+      // Hero status
+      document.getElementById('ladderCurrentBadgeHero').innerHTML = renderRankBadgeSvg(pRank.tierIndex, pRank.step, 48, false);
+      document.getElementById('ladderCurrentRankTitle').innerText = pRank.rankName;
+      document.getElementById('ladderCurrentStepPips').innerText = `Step ${pRank.step} of 5 in ${pRank.tier.name} · Rank ${gameState.duelLevel} of 40`;
+
+      const listContainer = document.getElementById('ladderTierList');
+      listContainer.innerHTML = '';
+
+      TIER_CONFIG.forEach((tier, idx) => {
+        const tierMin = (idx * 5) + 1;
+        const tierMax = (idx + 1) * 5;
+
+        const isCurrentTier = pRank.tierIndex === idx;
+        const isConquered = pRank.tierIndex > idx;
+        const isLocked = pRank.tierIndex < idx;
+
+        const card = document.createElement('div');
+        let borderClass = 'border-slate-800';
+        let bgClass = 'bg-slate-900/60';
+
+        if (isCurrentTier) {
+          borderClass = 'border-2 border-cyan-400 shadow-[0_0_20px_rgba(6,182,212,0.35)]';
+          bgClass = 'bg-gradient-to-b from-cyan-950/40 to-slate-900';
+        } else if (isConquered) {
+          borderClass = 'border-emerald-500/30';
+          bgClass = 'bg-emerald-950/10';
+        } else if (isLocked) {
+          borderClass = 'border-slate-900';
+          bgClass = 'bg-slate-950/60 opacity-60';
+        }
+
+        card.className = `glass-panel rounded-2xl p-3.5 border ${borderClass} ${bgClass} transition-all relative overflow-hidden`;
+
+        // Pips for this tier
+        let pipsHtml = '';
+        for (let s = 1; s <= 5; s++) {
+          if (isConquered) {
+            pipsHtml += `<span class="w-2 h-2 rounded-full inline-block" style="background:${tier.color}; box-shadow: 0 0 6px ${tier.color};"></span>`;
+          } else if (isCurrentTier) {
+            if (s <= pRank.step) {
+              pipsHtml += `<span class="w-2 h-2 rounded-full inline-block" style="background:${tier.color}; box-shadow: 0 0 8px ${tier.color};"></span>`;
+            } else {
+              pipsHtml += `<span class="w-2 h-2 rounded-full inline-block bg-slate-800 border border-slate-700"></span>`;
+            }
+          } else {
+            pipsHtml += `<span class="w-2 h-2 rounded-full inline-block bg-slate-900 border border-slate-800"></span>`;
+          }
+        }
+
+        let badgeSnippet = renderRankBadgeSvg(idx, isCurrentTier ? pRank.step : (isConquered ? 5 : 1), 54, false);
+        if (isLocked) {
+          badgeSnippet = `
+            <div class="w-12 h-12 rounded-full bg-slate-900 border border-slate-800 flex items-center justify-center text-xl text-slate-600">
+              🔒
+            </div>
+          `;
+        }
+
+        let statusBadge = '';
+        if (isCurrentTier) {
+          statusBadge = `<span class="text-[9px] font-mono px-2 py-0.5 rounded-full bg-cyan-500 text-black font-black uppercase">YOU ARE HERE</span>`;
+        } else if (isConquered) {
+          statusBadge = `<span class="text-[9px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-bold border border-emerald-500/30">✓ CONQUERED</span>`;
+        } else {
+          statusBadge = `<span class="text-[9px] font-mono px-2 py-0.5 rounded-full bg-slate-800 text-slate-500 font-bold">LOCKED · LVL ${tierMin}</span>`;
+        }
+
+        card.innerHTML = `
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-[10px] font-mono font-bold uppercase tracking-wider" style="color:${isLocked ? '#64748b' : tier.color};">
+              TIER ${idx + 1} · LEVELS ${tierMin}–${tierMax}
+            </span>
+            ${statusBadge}
+          </div>
+          <div class="flex items-center gap-3">
+            <div class="shrink-0">
+              ${badgeSnippet}
+            </div>
+            <div class="flex-1 min-w-0">
+              <h4 class="text-sm font-black text-white flex items-center gap-2">
+                <span>${tier.name}</span>
+                <span class="text-[10px] font-mono font-normal text-slate-400">(${tier.name} 1 - ${tier.name} 5)</span>
+              </h4>
+              <p class="text-[11px] text-slate-400 mt-0.5">${tier.desc}</p>
+              <div class="flex items-center gap-1.5 mt-2">
+                <span class="text-[9px] font-mono text-slate-500">STEPS:</span>
+                <div class="flex items-center gap-1">${pipsHtml}</div>
+              </div>
+            </div>
+          </div>
+          <div class="mt-2.5 pt-2 border-t border-slate-800/80 flex items-center justify-between text-[10px] font-mono">
+            <span class="text-amber-400 font-bold truncate">🎁 ${tier.rewardDesc}</span>
+            ${isCurrentTier ? `<button onclick="showView('duel')" class="px-2.5 py-1 bg-amber-500 hover:bg-amber-400 text-black font-bold text-[10px] rounded-lg cursor-pointer">DUEL NOW</button>` : ''}
+          </div>
+        `;
+
+        listContainer.appendChild(card);
+      });
+    }
+
+    /* -------------------------------------------------------------------------
+     * 12. PWA INSTALL HANDLER
+     * ------------------------------------------------------------------------- */
+    let deferredInstallPrompt = null;
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredInstallPrompt = e;
+      const installBtn = document.getElementById('installPwaBtn');
+      if (installBtn) installBtn.classList.remove('hidden');
+    });
+
+    function installPWA() {
+      const isIOS = /iphone|ipad|ipod/.test(navigator.userAgent.toLowerCase());
+      if (deferredInstallPrompt) {
+        deferredInstallPrompt.prompt();
+        deferredInstallPrompt.userChoice.then(() => {
+          deferredInstallPrompt = null;
+          document.getElementById('installPwaBtn').classList.add('hidden');
+        });
+      } else if (isIOS) {
+        document.getElementById('iosInstallModal').classList.remove('hidden');
+      } else {
+        alert("To install, open browser menu and select 'Add to Home Screen' or 'Install App'.");
+      }
+    }
+
+    if ('serviceWorker' in navigator) {
+      const swBlob = new Blob([
+        `self.addEventListener('install', e => self.skipWaiting());
+         self.addEventListener('activate', e => clients.claim());
+         self.addEventListener('fetch', e => {
+           e.respondWith(fetch(e.request).catch(() => caches.match(e.request)));
+         });`
+      ], { type: 'application/javascript' });
+      const swUrl = URL.createObjectURL(swBlob);
+      navigator.serviceWorker.register(swUrl).catch(() => {});
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      loadSavedState();
+      window.initQuoteShuffleBag();
+    });
+  </script>
+</body>
+</html>
